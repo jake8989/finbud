@@ -16,11 +16,10 @@ interface ThemeContextProps {
 const ThemeContext = createContext<ThemeContextProps | undefined>(undefined);
 
 const getInitialTheme = (): Theme => {
-  if (typeof window !== "undefined") {
+  if (typeof window !== "undefined" && window.localStorage) {
     const storedTheme = localStorage.getItem("theme") as Theme;
-    return storedTheme ? storedTheme : "dim";
+    return storedTheme === "light" ? "light" : "dim";
   }
-
   return "dim";
 };
 
@@ -29,25 +28,31 @@ export const ThemeContextProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const [theme, setTheme] = useState<Theme>(getInitialTheme);
 
-  // Toggle between 'light' and 'dim' themes
-  const toggleTheme = () => {
-    const newTheme: Theme = theme === "light" ? "dim" : "light";
-    setTheme(newTheme);
-    localStorage.setItem("theme", newTheme);
-  };
+  const toggleTheme = React.useCallback(() => {
+    setTheme((prevTheme) => {
+      const newTheme = prevTheme === "light" ? "dim" : "light";
+      localStorage.setItem("theme", newTheme);
+      return newTheme;
+    });
+  }, []);
 
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
   }, [theme]);
 
+  const contextValue = React.useMemo(
+    () => ({ theme, toggleTheme }),
+    [theme, toggleTheme]
+  );
+
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+    <ThemeContext.Provider value={contextValue}>
       {children}
     </ThemeContext.Provider>
   );
 };
 
-export const useTheme = () => {
+export const useTheme = (): ThemeContextProps => {
   const context = useContext(ThemeContext);
   if (!context) {
     throw new Error("useTheme must be used within a ThemeProvider");

@@ -4,7 +4,7 @@ import Dashboard from "../Expenses/Dashboard";
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import Image from "next/image";
-import expenseCategories from "@/data/expenseCategories";
+
 const TrackerDrawer = () => {
   const [whichComponent, setWhichComponent] = useState("Dashboard");
   const [loading, setLoading] = useState(true);
@@ -102,7 +102,7 @@ const TrackerDrawer = () => {
         htmlFor="my-drawer-2"
         className="btn btn-ghost drawer-button lg:hidden"
       >
-        <Image src="/ham.svg" height={20} width={20} alt="no"></Image>
+        <Image src="/hams.svg" height={20} width={20} alt="no"></Image>
       </label>
     </div>
   );

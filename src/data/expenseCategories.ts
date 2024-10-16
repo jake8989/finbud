@@ -77,6 +77,10 @@ const expenseCategories = [
     key: 21,
   },
   {
+    category: "EMI",
+    key: 31,
+  },
+  {
     category: "Student Loan Payments",
     key: 22,
   },
@@ -100,6 +104,14 @@ const expenseCategories = [
   {
     category: "Socializing",
     key: 28,
+  },
+  {
+    category: "Personal Savings",
+    key: 0,
+  },
+  {
+    category: "Short term Savings",
+    key: 30,
   },
   {
     category: "Miscellaneous Purchases (Impulse buys, small household items)",

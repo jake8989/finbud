@@ -24,6 +24,34 @@ const Navbar = () => {
         </a>
       </div>
       <div className="flex-none gap-2">
+        {/* //reminder icons for your goals! */}
+        <div className="dropdown md:dropdown-end">
+          <button
+            className="btn btn-ghost goals-reminder"
+            tabIndex={0}
+            role="button"
+          >
+            <Image
+              src="reminder-icon.svg"
+              height={25}
+              width={25}
+              alt="no"
+            ></Image>
+          </button>
+          <ul
+            tabIndex={0}
+            className="dropdown-content menu bg-neutral rounded-box z-[1] w-[250px] p-2 shadow"
+          >
+            {/* Reminders */}
+            <li>
+              <a>Lorem ipsum dolor sit amet consectetur adipisicing elit.</a>
+            </li>
+            <li>
+              <a>Lorem ipsum dolor sit amet consectetur adipisicing elit.</a>
+            </li>
+          </ul>
+        </div>
+
         <label className="swap swap-rotate">
           {/* this hidden checkbox controls the state */}
           <input

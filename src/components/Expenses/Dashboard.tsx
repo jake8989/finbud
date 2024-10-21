@@ -1,6 +1,16 @@
 import exp from "constants";
-
+import DashboardMonthlyExpenseChart from "../Charts/DashboardMonthlyExpense";
+import FinancialGoalsChart from "../Charts/DashboardGoalPolarGraph";
 const Dashboard = () => {
-  return <h1>Dashboard</h1>;
+  return (
+    <div className="flex">
+      <div className="flex w-[50%]">
+        <DashboardMonthlyExpenseChart></DashboardMonthlyExpenseChart>
+      </div>
+      <div className="flex w-[50%]">
+        <FinancialGoalsChart></FinancialGoalsChart>
+      </div>
+    </div>
+  );
 };
 export default Dashboard;

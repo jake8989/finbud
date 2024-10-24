@@ -1,6 +1,5 @@
 import exp from "constants";
 import DashboardMonthlyExpenseChart from "../Charts/DashboardMonthlyExpense";
-import FinancialGoalsChart from "../Charts/DashboardGoalPolarGraph";
 import DashboardExpenseReportCategorywise from "../Charts/DashboardExpenseReportCategorywise";
 import DashboardGoalChart from "../Charts/DashboardGoalChart";
 const Dashboard = () => {

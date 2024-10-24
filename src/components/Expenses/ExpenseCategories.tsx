@@ -29,6 +29,25 @@ const ExpenseCategories = () => {
             </div>
           </div>
         </div>
+        {/* //expense categories card show */}
+        {/* <div
+          className="card bg-primary text-primary-content w-96 overflow-y-auto h-64"
+          style={{ scrollbarWidth: "thin", scrollbarColor: "gray lightgray" }}
+        >
+          <div className="card-body ">
+            <h2 className="card-title">your Expense Categories!</h2>
+            <p>Groceries</p>
+            <p>Groceries</p>
+            <p>Groceries</p>
+            <p>Groceries</p>
+            <p>Groceries</p>
+            <p>Groceries</p>
+            <p>Groceries</p>
+            <p>Groceries</p>
+            <p>Groceries</p>
+            <p>Groceries</p>
+          </div>
+        </div> */}
       </div>
     </>
   );

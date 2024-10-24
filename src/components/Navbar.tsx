@@ -31,12 +31,7 @@ const Navbar = () => {
             tabIndex={0}
             role="button"
           >
-            <Image
-              src="reminder-icon.svg"
-              height={25}
-              width={25}
-              alt="no"
-            ></Image>
+            <Image src="bell.svg" height={25} width={25} alt="no"></Image>
           </button>
           <ul
             tabIndex={0}

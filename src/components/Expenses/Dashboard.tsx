@@ -6,7 +6,7 @@ import DashboardGoalChart from "../Charts/DashboardGoalChart";
 const Dashboard = () => {
   return (
     <div>
-      <div className="flex justify-center items-center">
+      <div className="flex justify-center items-center ">
         <div className="flex w-[50%]">
           <DashboardMonthlyExpenseChart></DashboardMonthlyExpenseChart>
         </div>

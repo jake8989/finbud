@@ -3,7 +3,7 @@ import Image from "next/image";
 const DashboardGoalChart = () => {
   return (
     <>
-      <div className="flex m-[50px]">
+      <div className="flex m-[50px] flex-wrap">
         <div className="card bg-neutral text-neutral-content w-60 h-[230px] relative m-[5px]">
           {/* Button positioned absolutely at the top-right */}
 

@@ -10,7 +10,6 @@ import {
   BarController,
 } from "chart.js";
 
-// Register the necessary components for the chart
 Chart.register(
   CategoryScale,
   LinearScale,
@@ -23,11 +22,10 @@ Chart.register(
 
 // Component for the Chart
 const DashboardMonthlyExpenseChart = () => {
-  const chartRef = useRef<Chart | null>(null); // Ref to store chart instance
+  const chartRef = useRef<Chart | null>(null);
   const DATA_COUNT = 12;
   const NUMBER_CFG = { count: DATA_COUNT, min: 0, max: 3000000 };
 
-  // Generate labels (replace Utils.months and Utils.numbers with your logic)
   const labels = [
     "January",
     "February",
@@ -41,7 +39,7 @@ const DashboardMonthlyExpenseChart = () => {
     "October",
     "November",
     "December",
-  ]; // Example for months
+  ];
   const data = {
     labels: labels,
     datasets: [
@@ -72,13 +70,11 @@ const DashboardMonthlyExpenseChart = () => {
       "dashboardmonthlyexpensechart"
     ) as HTMLCanvasElement;
 
-    // Destroy previous chart instance if it exists to prevent errors
     if (chartRef.current) {
       chartRef.current.destroy();
     }
 
     if (ctx) {
-      // Create new chart instance and store it in chartRef
       chartRef.current = new Chart(ctx, {
         type: "bar",
         data: data,

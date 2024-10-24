@@ -4,7 +4,7 @@ import Dashboard from "../Expenses/Dashboard";
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import Image from "next/image";
-
+import ExpenseCategories from "../Expenses/ExpenseCategories";
 const TrackerDrawer = () => {
   const [whichComponent, setWhichComponent] = useState("Dashboard");
   const [loading, setLoading] = useState(true);
@@ -28,6 +28,9 @@ const TrackerDrawer = () => {
       case "SetGoals": {
         return <SetGoals />;
       }
+      case "ExpenseCategories": {
+        return <ExpenseCategories />;
+      }
       default:
         return <Dashboard />;
     }
@@ -46,6 +49,10 @@ const TrackerDrawer = () => {
       setLoading(true);
       Cookies.set("expense-panel", "SetGoals", { expires: 7 });
       setWhichComponent("SetGoals");
+    } else if (panel === "ExpenseCategories") {
+      setLoading(true);
+      Cookies.set("expense-panel", "ExpenseCategories", { expires: 7 });
+      setWhichComponent("ExpenseCategories");
     }
     setTimeout(() => setLoading(false), 500);
   };
@@ -94,6 +101,12 @@ const TrackerDrawer = () => {
               onClick={() => handlePanelChange("SetGoals")}
             >
               Set Goals
+            </button>
+            <button
+              className="btn btn-ghost"
+              onClick={() => handlePanelChange("ExpenseCategories")}
+            >
+              Expense Categories
             </button>
           </li>
         </ul>

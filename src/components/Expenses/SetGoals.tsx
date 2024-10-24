@@ -2,10 +2,26 @@
 import expenseCategories from "@/data/expenseCategories";
 import styles from "@/styles/solar.module.css"; // Import as an object
 import Image from "next/image";
+import { useEffect, useRef } from "react";
 
 const SetGoals = () => {
-  //for solar galaxy stars
+  const startMinimumDateRef = useRef<HTMLInputElement | null>(null);
+  const setMinDate = () => {
+    let date = new Date();
+    let month = date.getMonth().toString().padStart(2, "0");
+    let year = date.getFullYear().toString();
+    let day = date.getDate().toString().padStart(2, "0");
 
+    let today = `${year}-${month}-${day}`;
+    console.log(today);
+
+    if (startMinimumDateRef.current) {
+      startMinimumDateRef.current.setAttribute("min", today);
+    }
+  };
+  useEffect(() => {
+    setMinDate();
+  }, []);
   return (
     <>
       <div className="flex justify-center">
@@ -16,9 +32,7 @@ const SetGoals = () => {
               Set your finacial goal's specify the dates, we will remind you
               about it!
             </p>
-            <p className="text-[12px]">
-              *starting date of the goal is today itself
-            </p>
+
             <label className="input input-bordered flex items-center gap-2 mt-1.5">
               <Image
                 src={"/rupees.svg"}
@@ -40,10 +54,24 @@ const SetGoals = () => {
               </svg>
               <input type="text" className="grow" placeholder="Description" />
             </label>
-
             <label className="input input-bordered flex items-center gap-2 mt-1.5">
               <Image src={"/date.svg"} height={18} width={18} alt="no"></Image>
-              <input type="date" className="grow" placeholder="Description" />
+              <input
+                type="date"
+                className="grow"
+                placeholder="Description"
+                id="start-date"
+                ref={startMinimumDateRef}
+              />
+            </label>
+            <label className="input input-bordered flex items-center gap-2 mt-1.5">
+              <Image src={"/date.svg"} height={18} width={18} alt="no"></Image>
+              <input
+                type="date"
+                className="grow"
+                placeholder="Description"
+                name="end-date"
+              />
             </label>
 
             <select className="select select-bordered w-full max-w-xs mt-1.5">

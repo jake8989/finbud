@@ -1,6 +1,7 @@
 import exp from "constants";
 import DashboardMonthlyExpenseChart from "../Charts/DashboardMonthlyExpense";
 import FinancialGoalsChart from "../Charts/DashboardGoalPolarGraph";
+import DashboardExpenseReportCategorywise from "../Charts/DashboardExpenseReportCategorywise";
 const Dashboard = () => {
   return (
     <div className="flex">
@@ -8,7 +9,7 @@ const Dashboard = () => {
         <DashboardMonthlyExpenseChart></DashboardMonthlyExpenseChart>
       </div>
       <div className="flex w-[50%]">
-        <FinancialGoalsChart></FinancialGoalsChart>
+        <DashboardExpenseReportCategorywise></DashboardExpenseReportCategorywise>
       </div>
     </div>
   );

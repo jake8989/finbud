@@ -1,6 +1,11 @@
-// The main component rendering the chart
 import Image from "next/image";
+import EditGoal from "../Modal/EditGoal";
+import { useState } from "react";
 const DashboardGoalChart = () => {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const handleClose = () => {
+    setIsOpen(false);
+  };
   return (
     <>
       <div className="flex m-[50px] flex-wrap">
@@ -11,7 +16,10 @@ const DashboardGoalChart = () => {
             className="tooltip tooltip-hover tooltip-primary tooltip-center"
             data-tip="Edit Goal"
           >
-            <button className="btn btn-ghost absolute top-2 right-2">
+            <button
+              className="btn btn-ghost absolute top-2 right-2"
+              onClick={() => setIsOpen(true)}
+            >
               <Image
                 src="/edit-button.svg"
                 height={25}
@@ -46,6 +54,11 @@ const DashboardGoalChart = () => {
               </p>
             </p>
           </div>
+          <EditGoal
+            isOpen={isOpen}
+            handleClose={handleClose}
+            goalId={"1"}
+          ></EditGoal>
         </div>
         <div className="card bg-neutral text-neutral-content w-60 h-[230px] relative m-[5px]">
           {/* Button positioned absolutely at the top-right */}
@@ -112,14 +125,13 @@ const DashboardGoalChart = () => {
               Repudiandae totam adipisci neque voluptatum, est quae!
             </p>
             <p className="flex">
-              {" "}
               <Image
                 src={"rupees.svg"}
                 height={20}
                 width={20}
                 alt="Rupees"
               ></Image>
-              12000{" "}
+              12000
             </p>
             <p>
               <p className="text-[10px]">

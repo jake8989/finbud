@@ -13,7 +13,7 @@ const Dashboard = () => {
           <DashboardExpenseReportCategorywise></DashboardExpenseReportCategorywise>
         </div>
       </div>
-      <div className="flex w-[100%] h-[300px]">
+      <div className="flex w-[100%]">
         <DashboardGoalChart></DashboardGoalChart>
       </div>
     </div>

@@ -5,7 +5,7 @@ const ExpenseCategories = () => {
         <div className="card bg-base-100 w-96 shadow-xl">
           <div className="card-body">
             <h2 className="card-title">Add an Expense Category!</h2>
-            <p>Set Your Own Expense Category</p>
+            <p>Set Your Own Expense Categories</p>
 
             <label className="input input-bordered flex items-center gap-2 mt-1.5">
               <svg

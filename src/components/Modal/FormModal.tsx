@@ -33,8 +33,29 @@ export const FormModal: React.FC<userFormsProps> = ({
   const handleSubmitForm = () => {
     console.log("action type ", userFormType);
     // for login username and password are required
-    if (formInputs.username.trim() === "") {
-      toast("Username cannot be empty", "warning", 3000);
+    if (
+      formInputs.username.trim() === "" ||
+      formInputs.email.trim() === "" ||
+      formInputs.password.trim() === "" ||
+      formInputs.confirmpassword.trim() === ""
+    ) {
+      toast("Empty Fields!", "warning", 3000);
+      return;
+    }
+    if (formInputs.password.trim().length < 6) {
+      toast(
+        "The password must have a minimum length of 6 characters.",
+        "warning",
+        3000
+      );
+      return;
+    }
+    if (formInputs.password.trim() !== formInputs.confirmpassword.trim()) {
+      toast("Password and Confirm Password do not match!", "warning", 3000);
+      return;
+    }
+    if (!formInputs.email.trim().includes("@")) {
+      toast("Provide a valid email!", "warning", 3000);
       return;
     }
 

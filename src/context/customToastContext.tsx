@@ -24,7 +24,6 @@ export const ToastContextProvider: React.FC<{ children: ReactNode }> = ({
       }));
     }, duration);
   };
-  console.log(createToast);
   return (
     <ToastContext.Provider value={{ toast }}>
       {children}

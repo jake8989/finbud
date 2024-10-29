@@ -1,6 +1,12 @@
 import { useState, useEffect, ChangeEvent } from "react";
 import { useFormState } from "react-dom";
 import { useToast } from "@/context/customToastContext";
+import { gql, useMutation } from "@apollo/client";
+import {
+  UserMutationResponse,
+  MutationRegisterUserArgs,
+} from "@/__generated__/graphql";
+import { REGISTER_USER } from "@/lib/mutations/registerUser";
 interface userFormsProps {
   userFormType: string;
   handleClose: () => void;
@@ -19,6 +25,8 @@ export const FormModal: React.FC<userFormsProps> = ({
   setUserFormType,
 }) => {
   const { toast } = useToast();
+  const [registerUser, { data, loading, error }] = useMutation(REGISTER_USER);
+
   const [formInputs, setFormInputs] = useState<UserFormInput>({
     username: "",
     email: "",
@@ -29,8 +37,14 @@ export const FormModal: React.FC<userFormsProps> = ({
   const handleModalClose = () => {
     setUserFormType(undefined); // reset form type on close
     handleClose();
+    setFormInputs({
+      username: "",
+      email: "",
+      password: "",
+      confirmpassword: "",
+    });
   };
-  const handleSubmitForm = () => {
+  const handleSubmitForm = async () => {
     console.log("action type ", userFormType);
     // for login username and password are required
     if (
@@ -58,8 +72,22 @@ export const FormModal: React.FC<userFormsProps> = ({
       toast("Provide a valid email!", "warning", 3000);
       return;
     }
-
-    // for register username, password, email and confirmpassword are required
+    const userRegisterData: MutationRegisterUserArgs = {
+      user: {
+        username: formInputs.username,
+        email: formInputs.email,
+        password: formInputs.password,
+      },
+    };
+    const { data } = await registerUser({
+      variables: userRegisterData, // Correctly pass user as the variable
+    });
+    // console.log(data.registerUser);
+    if (!data.success) {
+      toast(data.registerUser.message, "error", 3000);
+    }
+    //graphql request
+    // await registerUser();
   };
   const handleInputChanges = (event: ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();

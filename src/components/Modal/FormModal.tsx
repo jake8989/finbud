@@ -105,7 +105,7 @@ export const FormModal: React.FC<userFormsProps> = ({
           variables: userRegisterData,
         });
 
-        if (!data.success) {
+        if (!data.registerUser.success) {
           toast(data.registerUser.message, "error", 3000);
         }
         if (data.registerUser.success) {
@@ -115,8 +115,10 @@ export const FormModal: React.FC<userFormsProps> = ({
               email: data?.registerUser?.user?.email,
             },
           };
-          Cookie.set("token", data?.registerUser?.token);
           loginUserMethod(newUser);
+          Cookie.set("token", data?.registerUser?.token);
+          toast(data.registerUser.message, "success", 3000);
+          handleModalClose();
         }
       } catch (error) {
         console.log(error);

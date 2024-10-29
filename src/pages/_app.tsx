@@ -16,16 +16,16 @@ export default function App({ Component, pageProps }: AppProps) {
   // console.log(loading, error, data);s
   return (
     <>
-      <ApolloProvider client={client}>
-        <UserContextProvider>
+      <UserContextProvider>
+        <ApolloProvider client={client}>
           <ThemeContextProvider>
             <ToastContextProvider>
               <Navbar></Navbar>
               <Component {...pageProps} />
             </ToastContextProvider>
           </ThemeContextProvider>
-        </UserContextProvider>
-      </ApolloProvider>
+        </ApolloProvider>
+      </UserContextProvider>
     </>
   );
 }

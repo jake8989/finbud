@@ -5,8 +5,11 @@ import { gql, useMutation } from "@apollo/client";
 import {
   UserMutationResponse,
   MutationRegisterUserArgs,
+  MutationLoginUserArgs,
 } from "@/__generated__/graphql";
+
 import { REGISTER_USER } from "@/lib/mutations/registerUser";
+import { LOGIN_USER } from "@/lib/mutations/loginUser";
 interface userFormsProps {
   userFormType: string;
   handleClose: () => void;
@@ -25,7 +28,14 @@ export const FormModal: React.FC<userFormsProps> = ({
   setUserFormType,
 }) => {
   const { toast } = useToast();
-  const [registerUser, { data, loading, error }] = useMutation(REGISTER_USER);
+  const [
+    registerUser,
+    { data: registerData, loading: registerLoading, error: registerError },
+  ] = useMutation(REGISTER_USER);
+  const [
+    loginUser,
+    { data: loginData, loading: loginLoading, error: loginError },
+  ] = useMutation(LOGIN_USER);
 
   const [formInputs, setFormInputs] = useState<UserFormInput>({
     username: "",
@@ -46,12 +56,13 @@ export const FormModal: React.FC<userFormsProps> = ({
   };
   const handleSubmitForm = async () => {
     console.log("action type ", userFormType);
+    // console.log(formInputs);
     // for login username and password are required
     if (
       formInputs.username.trim() === "" ||
-      formInputs.email.trim() === "" ||
+      (formInputs.email.trim() === "" && userFormType === "register") ||
       formInputs.password.trim() === "" ||
-      formInputs.confirmpassword.trim() === ""
+      (formInputs.confirmpassword.trim() === "" && userFormType === "register")
     ) {
       toast("Empty Fields!", "warning", 3000);
       return;
@@ -64,33 +75,69 @@ export const FormModal: React.FC<userFormsProps> = ({
       );
       return;
     }
-    if (formInputs.password.trim() !== formInputs.confirmpassword.trim()) {
+    if (
+      formInputs.password.trim() !== formInputs.confirmpassword.trim() &&
+      userFormType === "register"
+    ) {
       toast("Password and Confirm Password do not match!", "warning", 3000);
       return;
     }
-    if (!formInputs.email.trim().includes("@")) {
+    if (!formInputs.email.trim().includes("@") && userFormType === "register") {
       toast("Provide a valid email!", "warning", 3000);
       return;
     }
-    const userRegisterData: MutationRegisterUserArgs = {
-      user: {
-        username: formInputs.username,
-        email: formInputs.email,
-        password: formInputs.password,
-      },
-    };
-    const { data } = await registerUser({
-      variables: userRegisterData, // Correctly pass user as the variable
-    });
-    // console.log(data.registerUser);
-    if (!data.success) {
-      toast(data.registerUser.message, "error", 3000);
+    if (userFormType === "register") {
+      try {
+        const userRegisterData: MutationRegisterUserArgs = {
+          user: {
+            username: formInputs.username,
+            email: formInputs.email,
+            password: formInputs.password,
+          },
+        };
+        const { data } = await registerUser({
+          variables: userRegisterData,
+        });
+
+        if (!data.success) {
+          toast(data.registerUser.message, "error", 3000);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    } else if (userFormType === "login") {
+      try {
+        const userLoginData: MutationLoginUserArgs = {
+          user: {
+            username: formInputs.username,
+            password: formInputs.password,
+          },
+        };
+        const { data } = await loginUser({
+          variables: {
+            user: {
+              username: formInputs.username,
+              password: formInputs.password,
+            },
+          },
+        });
+        console.log(data);
+        if (data.loginUser.success) {
+          toast(data.loginUser.message, "success", 2000);
+          handleModalClose();
+        }
+        if (!data.loginUser.success) {
+          toast(data.loginUser.message, "error", 2000);
+        }
+      } catch (error) {
+        console.log(error);
+        toast(error, "error", 2000);
+      }
     }
-    //graphql request
-    // await registerUser();
   };
   const handleInputChanges = (event: ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
+    // console.log(event.target.value);
     setFormInputs({ ...formInputs, [event.target.name]: event.target.value });
   };
   return (
@@ -188,10 +235,23 @@ export const FormModal: React.FC<userFormsProps> = ({
               )}
 
               <div className="mt-2"></div>
-              <button className="btn btn-primary" onClick={handleSubmitForm}>
-                {isLogin ? "Login" : "Register"}
+              <button
+                className="btn btn-primary"
+                onClick={handleSubmitForm}
+                disabled={loginLoading || registerLoading}
+              >
+                {registerLoading ||
+                  (loginLoading && (
+                    <span className="loading loading-spinner loading-xs"></span>
+                  ))}
+                {!registerLoading && !loginLoading && isLogin && "Login"}
+                {!registerLoading && !loginLoading && !isLogin && "Register"}
               </button>
-              <button className="btn ml-2" onClick={handleModalClose}>
+              <button
+                className="btn ml-2"
+                onClick={handleModalClose}
+                disabled={loginLoading || registerLoading}
+              >
                 Close
               </button>
             </div>

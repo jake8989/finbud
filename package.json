@@ -27,6 +27,7 @@
     "@graphql-codegen/typescript-react-apollo": "^4.3.2",
     "@types/chart.js": "^2.9.41",
     "@types/graphql": "^14.2.3",
+    "@types/js-cookie": "^3.0.6",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

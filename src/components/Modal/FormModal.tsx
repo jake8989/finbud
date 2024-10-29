@@ -10,6 +10,9 @@ import {
 
 import { REGISTER_USER } from "@/lib/mutations/registerUser";
 import { LOGIN_USER } from "@/lib/mutations/loginUser";
+import { useUser } from "@/context/userContext";
+import { User } from "@/utils/types";
+import Cookie from "js-cookie";
 interface userFormsProps {
   userFormType: string;
   handleClose: () => void;
@@ -28,6 +31,7 @@ export const FormModal: React.FC<userFormsProps> = ({
   setUserFormType,
 }) => {
   const { toast } = useToast();
+  const { user, loginUserMethod, logoutUserMethod } = useUser();
   const [
     registerUser,
     { data: registerData, loading: registerLoading, error: registerError },
@@ -86,6 +90,8 @@ export const FormModal: React.FC<userFormsProps> = ({
       toast("Provide a valid email!", "warning", 3000);
       return;
     }
+    //create new user in local
+
     if (userFormType === "register") {
       try {
         const userRegisterData: MutationRegisterUserArgs = {
@@ -101,6 +107,16 @@ export const FormModal: React.FC<userFormsProps> = ({
 
         if (!data.success) {
           toast(data.registerUser.message, "error", 3000);
+        }
+        if (data.registerUser.success) {
+          const newUser: User = {
+            user: {
+              username: data?.registerUser?.user?.username,
+              email: data?.registerUser?.user?.email,
+            },
+          };
+          Cookie.set("token", data?.registerUser?.token);
+          loginUserMethod(newUser);
         }
       } catch (error) {
         console.log(error);
@@ -123,6 +139,14 @@ export const FormModal: React.FC<userFormsProps> = ({
         });
         console.log(data);
         if (data.loginUser.success) {
+          const newUser: User = {
+            user: {
+              username: data?.loginUser?.user?.username,
+              email: data?.loginUser?.user?.email,
+            },
+          };
+          Cookie.set("token", data?.loginUser?.token);
+          loginUserMethod(newUser);
           toast(data.loginUser.message, "success", 2000);
           handleModalClose();
         }

@@ -18,3 +18,10 @@ export type User = {
     email: string;
   };
 };
+
+export type ExpenseType = {
+  amount: number | undefined;
+  category: string;
+  description: string;
+  expenseDate: string | undefined;
+};

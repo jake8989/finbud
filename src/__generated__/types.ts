@@ -14,9 +14,27 @@ export type Scalars = {
   Float: { input: number; output: number; }
 };
 
+export type ExpenseCategoryInput = {
+  expenseCategory: Scalars['String']['input'];
+  username: Scalars['String']['input'];
+};
+
+export type ExpenseCategoryResponse = {
+  __typename?: 'ExpenseCategoryResponse';
+  message: Scalars['String']['output'];
+  success: Scalars['Boolean']['output'];
+};
+
+export type ExpenseGetCategoriesResponseType = {
+  __typename?: 'ExpenseGetCategoriesResponseType';
+  success: Scalars['Boolean']['output'];
+  userExpenseCategories: Array<Scalars['String']['output']>;
+};
+
 export type ExpenseInput = {
   amount: Scalars['Int']['input'];
   category: Scalars['String']['input'];
+  description: Scalars['String']['input'];
   expenseDate: Scalars['String']['input'];
   username: Scalars['String']['input'];
 };
@@ -31,6 +49,7 @@ export type ExpenseResponseType = {
 export type Mutation = {
   __typename?: 'Mutation';
   createExpense: ExpenseResponseType;
+  createExpenseCategory: ExpenseCategoryResponse;
   loginUser: UserMutationResponse;
   registerUser: UserMutationResponse;
 };
@@ -38,6 +57,11 @@ export type Mutation = {
 
 export type MutationCreateExpenseArgs = {
   expense: ExpenseInput;
+};
+
+
+export type MutationCreateExpenseCategoryArgs = {
+  expenseCategory: ExpenseCategoryInput;
 };
 
 
@@ -52,7 +76,13 @@ export type MutationRegisterUserArgs = {
 
 export type Query = {
   __typename?: 'Query';
+  getAllExpenseCategories: ExpenseGetCategoriesResponseType;
   testQuery: Scalars['String']['output'];
+};
+
+
+export type QueryGetAllExpenseCategoriesArgs = {
+  username: Scalars['String']['input'];
 };
 
 export type UserInput = {

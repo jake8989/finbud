@@ -266,7 +266,7 @@ export const FormModal: React.FC<userFormsProps> = ({
                 onClick={handleSubmitForm}
                 disabled={loginLoading || registerLoading}
               >
-                {registerLoading || (loginLoading && " Loading...")}
+                {(registerLoading || loginLoading) && "Loading..."}
                 {!registerLoading && !loginLoading && isLogin && "Login"}
                 {!registerLoading && !loginLoading && !isLogin && "Register"}
               </button>

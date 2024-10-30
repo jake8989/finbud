@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { useTheme } from "@/context/themeContext";
-
+import { useRouter } from "next/router";
 export const HomePage: React.FC = () => {
   const { theme } = useTheme();
   const [currentTheme, setCurrentTheme] = useState<string | null>(null);
-
+  const router = useRouter();
   useEffect(() => {
     setCurrentTheme(theme);
   }, [theme]);
@@ -29,7 +29,10 @@ export const HomePage: React.FC = () => {
           Do not save what is left after spending, but spend what is left after
           saving <strong>-Warren Buffett</strong>
         </p>
-        <button className="btn btn-secondary">
+        <button
+          className="btn btn-secondary"
+          onClick={() => router.push("/track-expense")}
+        >
           Track Your Expenses
           <Image src="/right-arr.svg" height={22} width={22} alt="arr"></Image>
         </button>

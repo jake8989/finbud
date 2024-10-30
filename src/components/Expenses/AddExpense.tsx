@@ -1,18 +1,78 @@
 import Image from "next/image";
 import expenseCategories from "@/data/expenseCategories";
-import styles from "@/styles/solar.module.css";
+import React, { ChangeEvent } from "react";
+import { ExpenseType } from "@/utils/types";
+import { useUser } from "@/context/userContext";
+import { useMutation } from "@apollo/client";
+import { CREATE_EXPENSE } from "@/lib/mutations/createExpense";
+import { MutationCreateExpenseArgs } from "@/__generated__/graphql";
+import { useToast } from "@/context/customToastContext";
+import { execOnce } from "next/dist/shared/lib/utils";
 const AddExp = () => {
+  const { user } = useUser();
+  const { toast } = useToast();
+  const [createExpense, { data: ExpenseData, loading, error }] =
+    useMutation(CREATE_EXPENSE);
+
+  const [expense, setExpense] = React.useState<ExpenseType>({
+    amount: undefined,
+    category: "",
+    description: "",
+    expenseDate: undefined,
+  });
+  const handleOnChange = (event: any) => {
+    event.preventDefault();
+    console.log(event.target.value);
+    setExpense({ ...expense, [event.target.name]: event.target.value });
+  };
+  const handleSubmitExpense = async () => {
+    // console.log(expense);
+    if (
+      Number(expense.amount) === 0 ||
+      Number(expense.amount) == null ||
+      expense.amount == undefined
+    ) {
+      toast("Amount zero expense cannot be created", "warning", 2000);
+      return;
+    }
+    if (expense.category.trim() === "") {
+      toast("Please Provide Expense Category", "warning", 2000);
+      return;
+    }
+    if (expense.description.trim() === "") {
+      toast("Please Provide Description!", "warning", 2000);
+      return;
+    }
+    if (expense.expenseDate.trim() === "" || expense.expenseDate == undefined) {
+      toast("Please Provide Expense Date", "warning", 2000);
+      return;
+    }
+    console.log(typeof expense.expenseDate);
+    const newExpense: MutationCreateExpenseArgs = {
+      expense: {
+        username: user.user.username,
+        amount: Number(expense.amount),
+        category: expense.category,
+        description: expense.description,
+        expenseDate: expense.expenseDate,
+      },
+    };
+    const { data } = await createExpense({ variables: newExpense });
+    if (data.createExpense.success) {
+      toast(data.createExpense.message, "success", 3000);
+      setExpense({
+        amount: undefined,
+        category: "",
+        description: "",
+        expenseDate: undefined,
+      });
+    }
+    if (!data.createExpense.success) {
+      toast(data.createExpense.message, "error", 3000);
+    }
+  };
+
   return (
-    //for solar galaxy stars
-    // <div className={styles.parent}>
-    //   <link
-    //     href="https://fonts.googleapis.com/css?family=Lato:300,400,700"
-    //     rel="stylesheet"
-    //     type="text/css"
-    //   />
-    //   <div id={styles.stars} /> <div id={styles.stars2} />
-    //   <div id={styles.stars3} />
-    //   <div id={styles.title}></div>
     <div className="flex justify-center">
       <div className="card bg-base-100 w-96 shadow-xl">
         <div className="card-body">
@@ -20,7 +80,14 @@ const AddExp = () => {
           <p>Enter the amount and select the category</p>
           <label className="input input-bordered flex items-center gap-2 mt-1.5">
             <Image src={"/rupees.svg"} height={18} width={18} alt="no"></Image>
-            <input type="number" className="grow" placeholder="Amount" />
+            <input
+              type="number"
+              className="grow"
+              placeholder="Amount"
+              name="amount"
+              onChange={handleOnChange}
+              value={expense.amount || ""}
+            />
           </label>
           <label className="input input-bordered flex items-center gap-2 mt-1.5">
             <svg
@@ -32,26 +99,52 @@ const AddExp = () => {
               <path d="M2.5 3A1.5 1.5 0 0 0 1 4.5v.793c.026.009.051.02.076.032L7.674 8.51c.206.1.446.1.652 0l6.598-3.185A.755.755 0 0 1 15 5.293V4.5A1.5 1.5 0 0 0 13.5 3h-11Z" />
               <path d="M15 6.954 8.978 9.86a2.25 2.25 0 0 1-1.956 0L1 6.954V11.5A1.5 1.5 0 0 0 2.5 13h11a1.5 1.5 0 0 0 1.5-1.5V6.954Z" />
             </svg>
-            <input type="text" className="grow" placeholder="Description" />
+            <input
+              type="text"
+              className="grow"
+              placeholder="Description"
+              name="description"
+              onChange={handleOnChange}
+              value={expense.description}
+            />
           </label>
           <label className="input input-bordered flex items-center gap-2 mt-1.5">
             <Image src={"/date.svg"} height={18} width={18} alt="no"></Image>
-            <input type="date" className="grow" placeholder="Description" />
+            <input
+              type="date"
+              className="grow"
+              placeholder="Description"
+              name="expenseDate"
+              onChange={handleOnChange}
+              value={expense.expenseDate || ""}
+            />
           </label>
 
-          <select className="select select-bordered w-full max-w-xs mt-1.5">
+          <select
+            className="select select-bordered w-full max-w-xs mt-1.5"
+            name="category"
+            onChange={handleOnChange}
+            value={expense.category}
+          >
             <option disabled selected>
               Select Category of Expense
             </option>
             {expenseCategories.map((expense) => (
-              <option value="" key={expense.key}>
+              <option value={expense.category} key={expense.key}>
                 {expense.category}
               </option>
             ))}
           </select>
 
           <div className="card-actions justify-end">
-            <button className="btn btn-primary mt-1.5">Meowww</button>
+            <button
+              className="btn btn-primary mt-1.5"
+              onClick={handleSubmitExpense}
+              disabled={loading}
+            >
+              {loading && "Loading..."}
+              {!loading && "Meowwww"}
+            </button>
           </div>
         </div>
       </div>

@@ -1,4 +1,51 @@
+import { CREATE_EXPENSE_CATEGORY } from "@/lib/mutations/createNewExpenseCategory";
+import { useMutation } from "@apollo/client";
+import { useUser } from "@/context/userContext";
+import React, { ChangeEvent } from "react";
+import { useToast } from "@/context/customToastContext";
+import { MutationCreateExpenseCategoryArgs } from "@/__generated__/graphql";
+interface NewExpenseCategory {
+  expenseCategory: string;
+}
 const ExpenseCategories = () => {
+  const [createExpenseCategory, { data: ExpenseResponse, loading, error }] =
+    useMutation(CREATE_EXPENSE_CATEGORY);
+  const { user } = useUser();
+  const { toast } = useToast();
+  const [newExpenseCategory, setNewExpenseCategory] =
+    React.useState<NewExpenseCategory>({ expenseCategory: "" });
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    event.preventDefault();
+    setNewExpenseCategory({
+      ...newExpenseCategory,
+      [event.target.name]: event.target.value,
+    });
+  };
+  const handleSubmitHandler = async () => {
+    if (newExpenseCategory.expenseCategory === "") {
+      toast("Expense Category Can not be empty", "warning", 2000);
+      return;
+    }
+    const expenseCategoryNew: MutationCreateExpenseCategoryArgs = {
+      expenseCategory: {
+        username: user.user.username,
+        expenseCategory: newExpenseCategory.expenseCategory,
+      },
+    };
+    const { data } = await createExpenseCategory({
+      variables: expenseCategoryNew,
+    });
+    // console.log(data);
+    if (data.createExpenseCategory.success) {
+      toast(data.createExpenseCategory.message, "success", 3000);
+      setNewExpenseCategory({ expenseCategory: "" });
+    }
+    if (!data.createExpenseCategory.success) {
+      toast(data.createExpenseCategory.message, "error", 3000);
+      setNewExpenseCategory({ expenseCategory: "" });
+    }
+  };
+
   return (
     <>
       <div className="flex justify-center">
@@ -21,11 +68,21 @@ const ExpenseCategories = () => {
                 type="text"
                 className="grow"
                 placeholder="Expense Category"
+                onChange={handleChange}
+                name="expenseCategory"
+                value={newExpenseCategory.expenseCategory || ""}
               />
             </label>
 
             <div className="card-actions justify-end">
-              <button className="btn btn-primary mt-1.5">Meowww</button>
+              <button
+                className="btn btn-primary mt-1.5"
+                disabled={loading}
+                onClick={handleSubmitHandler}
+              >
+                {loading && "Loading..."}
+                {!loading && "Meowww"}
+              </button>
             </div>
           </div>
         </div>

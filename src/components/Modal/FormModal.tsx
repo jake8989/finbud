@@ -266,10 +266,7 @@ export const FormModal: React.FC<userFormsProps> = ({
                 onClick={handleSubmitForm}
                 disabled={loginLoading || registerLoading}
               >
-                {registerLoading ||
-                  (loginLoading && (
-                    <span className="loading loading-spinner loading-xs"></span>
-                  ))}
+                {registerLoading || (loginLoading && " Loading...")}
                 {!registerLoading && !loginLoading && isLogin && "Login"}
                 {!registerLoading && !loginLoading && !isLogin && "Register"}
               </button>

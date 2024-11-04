@@ -19,7 +19,7 @@ const TrackerDrawer = () => {
     if (!userLoading) {
       if (!user) {
         console.log("No User");
-        toast("Plese Signup/Login for this step!", "info", 2000);
+        toast("Login/Signup required for this step!", "info", 2000);
         router.push("/");
       }
     }

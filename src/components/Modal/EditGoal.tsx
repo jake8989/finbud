@@ -24,6 +24,9 @@ const EditGoal: React.FC<EditGoalProps> = ({ isOpen, handleClose, goalId }) => {
       >
         <div className="modal-box">
           <h3 className="font-bold text-lg text-center">Edit Goal</h3>
+          <p className="text-center">
+            Input whatever changes you want to change in goal!
+          </p>
 
           <div className="mt-2">
             <label className="input input-bordered flex items-center gap-2 mt-1.5">

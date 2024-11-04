@@ -119,4 +119,25 @@
 //   },
 // ];
 // export default expenseCategories;
+import { useState, useEffect } from "react";
 import { useQuery } from "@apollo/client";
+import { GET_ALL_EXPENSES_CATEGORIES } from "@/lib/queries/getAllexpenseCategories";
+
+export const FetchExpenseCategories = (username: string) => {
+  const [expenseCategories, setExpenseCategories] = useState([]);
+  const { data, loading, error } = useQuery(GET_ALL_EXPENSES_CATEGORIES, {
+    variables: { username },
+    fetchPolicy: "cache-first",
+  });
+
+  useEffect(() => {
+    if (data && data.getAllExpenseCategories.success) {
+      const categories = data.getAllExpenseCategories.userExpenseCategories.map(
+        (category, index) => ({ key: index, category })
+      );
+      setExpenseCategories(categories);
+    }
+  }, [data]);
+
+  return { expenseCategories, loading, error };
+};

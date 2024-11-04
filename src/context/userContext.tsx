@@ -5,6 +5,7 @@ interface UserContextProps {
   user: User | null;
   loginUserMethod: (user: User) => void;
   logoutUserMethod: () => void;
+  userLoading: boolean;
 }
 const UserContext = React.createContext<UserContextProps | undefined>(
   undefined
@@ -14,11 +15,13 @@ export const UserContextProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [user, setUser] = React.useState<User | null>(null);
+  const [userLoading, setUserLoading] = React.useState<boolean>(true);
   React.useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
       setUser(JSON.parse(storedUser));
     }
+    setUserLoading(false);
   }, []);
   const loginUserMethod = (user: User) => {
     setUser(user);
@@ -30,7 +33,9 @@ export const UserContextProvider: React.FC<{ children: ReactNode }> = ({
     Cookies.remove("token");
   };
   return (
-    <UserContext.Provider value={{ user, loginUserMethod, logoutUserMethod }}>
+    <UserContext.Provider
+      value={{ user, loginUserMethod, logoutUserMethod, userLoading }}
+    >
       {children}
     </UserContext.Provider>
   );

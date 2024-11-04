@@ -4,10 +4,26 @@ import Dashboard from "../Expenses/Dashboard";
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import Image from "next/image";
+import { useUser } from "@/context/userContext";
 import ExpenseCategories from "../Expenses/ExpenseCategories";
+import { useRouter } from "next/router";
+import { useToast } from "@/context/customToastContext";
 const TrackerDrawer = () => {
   const [whichComponent, setWhichComponent] = useState("Dashboard");
   const [loading, setLoading] = useState(true);
+  const { user, userLoading } = useUser();
+  const router = useRouter();
+  const { toast } = useToast();
+  console.log(user, userLoading);
+  useEffect(() => {
+    if (!userLoading) {
+      if (!user) {
+        console.log("No User");
+        toast("Plese Signup/Login for this step!", "info", 2000);
+        router.push("/");
+      }
+    }
+  }, []);
   useEffect(() => {
     // Set the initial state based on the cookie if available
     const componentFromCookie = Cookies.get("expense-panel");
@@ -56,7 +72,11 @@ const TrackerDrawer = () => {
     }
     setTimeout(() => setLoading(false), 500);
   };
-
+  if (userLoading) {
+    <div className="flex justify-center items-center h-full">
+      <span className="loading loading-ring loading-lg"></span>
+    </div>;
+  }
   return (
     <div className="drawer lg:drawer-open">
       <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />

@@ -1,11 +1,18 @@
 // src/components/Expenses/SetGoals.tsx
-import expenseCategories from "@/data/expenseCategories";
+// import expenseCategories from "@/data/expenseCategories";
 import styles from "@/styles/solar.module.css"; // Import as an object
 import Image from "next/image";
 import { useEffect, useRef } from "react";
-
+import { useUser } from "@/context/userContext";
+import { FetchExpenseCategories } from "@/data/expenseCategories";
 const SetGoals = () => {
   const startMinimumDateRef = useRef<HTMLInputElement | null>(null);
+  const { user } = useUser();
+  const {
+    expenseCategories,
+    loading: ExpenseCategoryLoading,
+    error,
+  } = FetchExpenseCategories(user?.user?.username);
   const setMinDate = () => {
     let date = new Date();
     let month = date.getMonth().toString().padStart(2, "0");
@@ -22,6 +29,13 @@ const SetGoals = () => {
   useEffect(() => {
     setMinDate();
   }, []);
+  if (ExpenseCategoryLoading) {
+    return (
+      <div className="flex justify-center items-center h-full">
+        <span className="loading loading-ring loading-lg"></span>
+      </div>
+    );
+  }
   return (
     <>
       <div className="flex justify-center">
@@ -88,14 +102,18 @@ const SetGoals = () => {
               <option disabled selected>
                 Choose your Reminder frequency
               </option>
-              <option value="">Daily</option>
               <option value="">Weekly</option>
               <option value="">Monthly</option>
               <option value="">Yearly</option>
             </select>
 
             <div className="card-actions justify-end">
-              <button className="btn btn-primary mt-1.5">Meowww</button>
+              <button
+                className="btn btn-primary mt-1.5"
+                disabled={ExpenseCategoryLoading}
+              >
+                Meowww
+              </button>
             </div>
           </div>
         </div>

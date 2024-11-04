@@ -1,5 +1,5 @@
 import Image from "next/image";
-import expenseCategories from "@/data/expenseCategories";
+import { FetchExpenseCategories } from "@/data/expenseCategories";
 import React, { ChangeEvent } from "react";
 import { ExpenseType } from "@/utils/types";
 import { useUser } from "@/context/userContext";
@@ -11,9 +11,16 @@ import { execOnce } from "next/dist/shared/lib/utils";
 const AddExp = () => {
   const { user } = useUser();
   const { toast } = useToast();
-  const [createExpense, { data: ExpenseData, loading, error }] =
-    useMutation(CREATE_EXPENSE);
-
+  const [
+    createExpense,
+    { data: ExpenseData, loading: ExpenseLoading, error: ExpenseError },
+  ] = useMutation(CREATE_EXPENSE);
+  const {
+    expenseCategories,
+    loading: ExpenseCategoryLoading,
+    error,
+  } = FetchExpenseCategories(user?.user?.username);
+  // console.log(expenseCategories);
   const [expense, setExpense] = React.useState<ExpenseType>({
     amount: undefined,
     category: "",
@@ -71,7 +78,13 @@ const AddExp = () => {
       toast(data.createExpense.message, "error", 3000);
     }
   };
-
+  if (ExpenseCategoryLoading) {
+    return (
+      <div className="flex justify-center items-center h-full">
+        <span className="loading loading-ring loading-lg"></span>
+      </div>
+    );
+  }
   return (
     <div className="flex justify-center">
       <div className="card bg-base-100 w-96 shadow-xl">
@@ -140,10 +153,10 @@ const AddExp = () => {
             <button
               className="btn btn-primary mt-1.5"
               onClick={handleSubmitExpense}
-              disabled={loading}
+              disabled={ExpenseLoading || ExpenseCategoryLoading}
             >
-              {loading && "Loading..."}
-              {!loading && "Meowwww"}
+              {ExpenseLoading && "Loading..."}
+              {!ExpenseLoading && "Meowwww"}
             </button>
           </div>
         </div>

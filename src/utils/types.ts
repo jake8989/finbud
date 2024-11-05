@@ -25,3 +25,13 @@ export type ExpenseType = {
   description: string;
   expenseDate: string | undefined;
 };
+
+export type GoalType = {
+  goalAmount: number | undefined;
+  goalCategory: string;
+  goalStartDate: string;
+  goalEndDate: string;
+  goalDescription: string;
+  goalType: string;
+  goalReminderFreq: string;
+};

@@ -2,12 +2,59 @@
 // import expenseCategories from "@/data/expenseCategories";
 import styles from "@/styles/solar.module.css"; // Import as an object
 import Image from "next/image";
-import { useEffect, useRef } from "react";
+import { ChangeEvent, useEffect, useRef } from "react";
 import { useUser } from "@/context/userContext";
 import { FetchExpenseCategories } from "@/data/expenseCategories";
+import { useMutation } from "@apollo/client";
+import { ADDNEWGOAL, EDITGOAL, DELETENEWGOAL } from "@/lib/mutations/goal";
+import React from "react";
+import { GoalType } from "@/utils/types";
+import { isGoalDataOkay } from "@/utils/goalDataChecker";
+import { useToast } from "@/context/customToastContext";
 const SetGoals = () => {
   const startMinimumDateRef = useRef<HTMLInputElement | null>(null);
   const { user } = useUser();
+  //data mutations
+  const [
+    addNewGoal,
+    { data, loading: addNewGoalLoading, error: addNewGoalError },
+  ] = useMutation(ADDNEWGOAL);
+
+  // goalFormData
+  const [goalFormData, setGoalFormData] = React.useState<GoalType>({
+    goalAmount: undefined,
+    goalCategory: "",
+    goalEndDate: "",
+    goalStartDate: "",
+    goalType: "",
+    goalDescription: "",
+    goalReminderFreq: "",
+  });
+  const handleOnChange = (event: any) => {
+    event.preventDefault();
+    setGoalFormData({
+      ...goalFormData,
+      [event.target.name]: event.target.value,
+    });
+  };
+  const { toast } = useToast();
+  //backend integration
+  const handleGoalSubmit = () => {
+    if (isGoalDataOkay(goalFormData) == "ErrorEmpty") {
+      toast("Empty Fields in goal!", "warning", 2000);
+      return;
+    }
+    if (isGoalDataOkay(goalFormData) == "ErrorAmount") {
+      toast("Amount cannot be zero or negative!", "warning", 2000);
+      return;
+    }
+    if (isGoalDataOkay(goalFormData) == "ErrorDate") {
+      toast("Check you start date and end date", "warning", 2000);
+      return;
+    }
+    if (isGoalDataOkay(goalFormData) == "Success") {
+    }
+  };
   const {
     expenseCategories,
     loading: ExpenseCategoryLoading,
@@ -54,7 +101,13 @@ const SetGoals = () => {
                 width={18}
                 alt="no"
               ></Image>
-              <input type="number" className="grow" placeholder="Amount" />
+              <input
+                type="number"
+                className="grow"
+                placeholder="Amount"
+                name="goalAmount"
+                onChange={handleOnChange}
+              />
             </label>
             <label className="input input-bordered flex items-center gap-2 mt-1.5">
               <svg
@@ -66,7 +119,16 @@ const SetGoals = () => {
                 <path d="M2.5 3A1.5 1.5 0 0 0 1 4.5v.793c.026.009.051.02.076.032L7.674 8.51c.206.1.446.1.652 0l6.598-3.185A.755.755 0 0 1 15 5.293V4.5A1.5 1.5 0 0 0 13.5 3h-11Z" />
                 <path d="M15 6.954 8.978 9.86a2.25 2.25 0 0 1-1.956 0L1 6.954V11.5A1.5 1.5 0 0 0 2.5 13h11a1.5 1.5 0 0 0 1.5-1.5V6.954Z" />
               </svg>
-              <input type="text" className="grow" placeholder="Description" />
+              <input
+                type="text"
+                className="grow"
+                placeholder="Description"
+                name="goalDescription"
+                onChange={handleOnChange}
+              />
+            </label>
+            <label htmlFor="start-date" className="text-sm font-medium">
+              Starting Date of Goal
             </label>
             <label className="input input-bordered flex items-center gap-2 mt-1.5">
               <Image src={"/date.svg"} height={18} width={18} alt="no"></Image>
@@ -76,41 +138,69 @@ const SetGoals = () => {
                 placeholder="Description"
                 id="start-date"
                 ref={startMinimumDateRef}
+                name="goalStartDate"
+                onChange={handleOnChange}
               />
+            </label>
+            <label htmlFor="start-date" className="text-sm font-medium">
+              End Date of Goal
             </label>
             <label className="input input-bordered flex items-center gap-2 mt-1.5">
               <Image src={"/date.svg"} height={18} width={18} alt="no"></Image>
               <input
                 type="date"
                 className="grow"
-                placeholder="Description"
-                name="end-date"
+                placeholder="End Date"
+                name="goalEndDate"
+                ref={startMinimumDateRef}
+                onChange={handleOnChange}
               />
             </label>
 
-            <select className="select select-bordered w-full max-w-xs mt-1.5">
+            <select
+              className="select select-bordered w-full max-w-xs mt-1.5"
+              name="goalCategory"
+              onChange={handleOnChange}
+            >
               <option disabled selected>
-                Select Category of Expense
+                Select Category of Goal
               </option>
               {expenseCategories.map((expense) => (
-                <option value="" key={expense.key}>
+                <option value={expense.category} key={expense.key}>
                   {expense.category}
                 </option>
               ))}
             </select>
-            <select className="select select-bordered w-full max-w-xs mt-1.5">
+            <select
+              className="select select-bordered w-full max-w-xs mt-1.5"
+              name="goalType"
+              onChange={handleOnChange}
+            >
+              <option disabled selected>
+                Choose Goal Type
+              </option>
+              <option>Saving Goal</option>
+              <option>Spending Goal</option>
+            </select>
+            <select
+              className="select select-bordered w-full max-w-xs mt-1.5"
+              name="goalReminderFreq"
+              onChange={handleOnChange}
+            >
               <option disabled selected>
                 Choose your Reminder frequency
               </option>
-              <option value="">Weekly</option>
-              <option value="">Monthly</option>
-              <option value="">Yearly</option>
+              <option>Daily</option>
+              <option>Weekly</option>
+              <option>Monthly</option>
+              <option>Yearly</option>
             </select>
 
             <div className="card-actions justify-end">
               <button
                 className="btn btn-primary mt-1.5"
-                disabled={ExpenseCategoryLoading}
+                disabled={false}
+                onClick={handleGoalSubmit}
               >
                 Meowww
               </button>

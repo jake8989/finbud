@@ -80,7 +80,6 @@ const DashboardMonthlyExpenseChart = () => {
         data: data,
         options: {
           responsive: true,
-          // maintainAspectRatio: false,
           plugins: {
             legend: {
               position: "top",
@@ -94,13 +93,12 @@ const DashboardMonthlyExpenseChart = () => {
       });
     }
 
-    // Cleanup function to destroy the chart when the component unmounts
     return () => {
       if (chartRef.current) {
         chartRef.current.destroy();
       }
     };
-  }, []); // Empty dependency array ensures this runs only once after component mounts
+  }, []);
 
   return <canvas id="dashboardmonthlyexpensechart"></canvas>;
 };

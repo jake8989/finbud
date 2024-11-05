@@ -112,11 +112,11 @@ const Navbar = () => {
           </>
         ) : (
           <div className="dropdown dropdown-end">
-            <div tabIndex={0} role="button" className="btn m-1">
+            <div tabIndex={0} role="button" className="btn p-2 btn-ghost">
               {" "}
               <div className="avatar placeholder">
                 <div className="bg-neutral text-neutral-content w-8 rounded-full">
-                  <span>{user.user.username.slice(0, 2)}</span>
+                  <span>{user.user.username.slice(0, 2).toUpperCase()}</span>
                 </div>
               </div>
             </div>

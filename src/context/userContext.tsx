@@ -1,6 +1,7 @@
 import React, { ReactNode } from "react";
 import { User } from "@/utils/types";
 import Cookies from "js-cookie";
+import { useRouter } from "next/router";
 interface UserContextProps {
   user: User | null;
   loginUserMethod: (user: User) => void;
@@ -16,6 +17,7 @@ export const UserContextProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const [user, setUser] = React.useState<User | null>(null);
   const [userLoading, setUserLoading] = React.useState<boolean>(true);
+  const router = useRouter();
   React.useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
@@ -31,6 +33,7 @@ export const UserContextProvider: React.FC<{ children: ReactNode }> = ({
     setUser(null);
     localStorage.removeItem("user");
     Cookies.remove("token");
+    router.push("/");
   };
   return (
     <UserContext.Provider

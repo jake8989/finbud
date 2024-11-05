@@ -3,9 +3,20 @@ import Image from "next/image";
 import { FormModal } from "./Modal/FormModal";
 import { useTheme } from "@/context/themeContext";
 import { useState } from "react";
+import { useUser } from "@/context/userContext";
+import { useToast } from "@/context/customToastContext";
+{
+  /* <div className="avatar placeholder">
+  <div className="bg-neutral text-neutral-content w-12 rounded-full">
+    <span>SY</span>
+  </div>
+</div> */
+}
 const Navbar = () => {
   const { theme, toggleTheme } = useTheme();
+  const { user, userLoading, logoutUserMethod } = useUser();
   const [userFormType, setUserFormType] = useState<string>(undefined);
+  const { toast } = useToast();
   const handleOpenLoginForm = () => {
     setUserFormType("login");
   };
@@ -14,6 +25,17 @@ const Navbar = () => {
   };
   const handleClose = () => {
     setUserFormType(undefined);
+  };
+  if (userLoading) {
+    return (
+      <div className="flex justify-end items-center mt-[20px]">
+        <progress className="progress w-56"></progress>
+      </div>
+    );
+  }
+  const handleLogout = async () => {
+    await logoutUserMethod();
+    toast("Logged Out Successfully!", "success", 3000);
   };
   return (
     <div className="navbar bg-base-100">
@@ -72,18 +94,46 @@ const Navbar = () => {
             <path d="M21.64,13a1,1,0,0,0-1.05-.14,8.05,8.05,0,0,1-3.37.73A8.15,8.15,0,0,1,9.08,5.49a8.59,8.59,0,0,1,.25-2A1,1,0,0,0,8,2.36,10.14,10.14,0,1,0,22,14.05,1,1,0,0,0,21.64,13Zm-9.5,6.69A8.14,8.14,0,0,1,7.08,5.22v.27A10.15,10.15,0,0,0,17.22,15.63a9.79,9.79,0,0,0,2.1-.22A8.11,8.11,0,0,1,12.14,19.73Z" />
           </svg>
         </label>
-        <button
-          className="btn  btn-ghost text-sm"
-          onClick={handleOpenLoginForm}
-        >
-          Login
-        </button>
-        <button
-          className="btn btn-ghost text-sm"
-          onClick={handleOpenRegisterForm}
-        >
-          Register
-        </button>
+
+        {!user ? (
+          <>
+            <button
+              className="btn  btn-ghost text-sm"
+              onClick={handleOpenLoginForm}
+            >
+              Login
+            </button>
+            <button
+              className="btn btn-ghost text-sm"
+              onClick={handleOpenRegisterForm}
+            >
+              Register
+            </button>
+          </>
+        ) : (
+          <div className="dropdown dropdown-end">
+            <div tabIndex={0} role="button" className="btn m-1">
+              {" "}
+              <div className="avatar placeholder">
+                <div className="bg-neutral text-neutral-content w-8 rounded-full">
+                  <span>{user.user.username.slice(0, 2)}</span>
+                </div>
+              </div>
+            </div>
+
+            <ul
+              tabIndex={0}
+              className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow"
+            >
+              <li>
+                <button className="btn btn-warning" onClick={handleLogout}>
+                  Logout
+                </button>
+              </li>
+            </ul>
+          </div>
+        )}
+
         <FormModal
           userFormType={userFormType}
           handleClose={handleClose}

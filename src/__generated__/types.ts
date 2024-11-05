@@ -14,6 +14,19 @@ export type Scalars = {
   Float: { input: number; output: number; }
 };
 
+export type DeleteGoalInputType = {
+  goalId: Scalars['String']['input'];
+  username: Scalars['String']['input'];
+};
+
+export type EditGoalInputType = {
+  goalAmount?: InputMaybe<Scalars['Int']['input']>;
+  goalDescription?: InputMaybe<Scalars['String']['input']>;
+  goalEndDate?: InputMaybe<Scalars['String']['input']>;
+  goalId: Scalars['String']['input'];
+  username: Scalars['String']['input'];
+};
+
 export type ExpenseCategoryInput = {
   expenseCategory: Scalars['String']['input'];
   username: Scalars['String']['input'];
@@ -46,12 +59,50 @@ export type ExpenseResponseType = {
   success: Scalars['Boolean']['output'];
 };
 
+export type GoalInput = {
+  goalAmount: Scalars['Int']['input'];
+  goalCategory: Scalars['String']['input'];
+  goalDescription: Scalars['String']['input'];
+  goalEndDate: Scalars['String']['input'];
+  goalReminderFreq: Scalars['String']['input'];
+  goalStartDate: Scalars['String']['input'];
+  goalType: Scalars['String']['input'];
+  username: Scalars['String']['input'];
+};
+
+export type GoalReponseType = {
+  __typename?: 'GoalReponseType';
+  goal?: Maybe<GoalType>;
+  message: Scalars['String']['output'];
+  success: Scalars['Boolean']['output'];
+};
+
+export type GoalType = {
+  __typename?: 'GoalType';
+  goalAmount: Scalars['Int']['output'];
+  goalCategory: Scalars['String']['output'];
+  goalDescription: Scalars['String']['output'];
+  goalEndDate: Scalars['String']['output'];
+  goalId: Scalars['String']['output'];
+  goalReminderFreq: Scalars['String']['output'];
+  goalStartDate: Scalars['String']['output'];
+  goalType: Scalars['String']['output'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
+  addNewGoal: GoalReponseType;
   createExpense: ExpenseResponseType;
   createExpenseCategory: ExpenseCategoryResponse;
+  deleteGoal: GoalReponseType;
+  editGoal: GoalReponseType;
   loginUser: UserMutationResponse;
   registerUser: UserMutationResponse;
+};
+
+
+export type MutationAddNewGoalArgs = {
+  goal: GoalInput;
 };
 
 
@@ -62,6 +113,16 @@ export type MutationCreateExpenseArgs = {
 
 export type MutationCreateExpenseCategoryArgs = {
   expenseCategory: ExpenseCategoryInput;
+};
+
+
+export type MutationDeleteGoalArgs = {
+  goal: DeleteGoalInputType;
+};
+
+
+export type MutationEditGoalArgs = {
+  goal: EditGoalInputType;
 };
 
 

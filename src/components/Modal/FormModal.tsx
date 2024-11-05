@@ -31,7 +31,7 @@ export const FormModal: React.FC<userFormsProps> = ({
   setUserFormType,
 }) => {
   const { toast } = useToast();
-  const { user, loginUserMethod, logoutUserMethod } = useUser();
+  const { user, loginUserMethod, logoutUserMethod, userLoading } = useUser();
   const [
     registerUser,
     { data: registerData, loading: registerLoading, error: registerError },
@@ -116,7 +116,7 @@ export const FormModal: React.FC<userFormsProps> = ({
             },
           };
           loginUserMethod(newUser);
-          Cookie.set("token", data?.registerUser?.token);
+          Cookie.set("token", data?.registerUser?.token, { expires: 1 });
           toast(data.registerUser.message, "success", 3000);
           handleModalClose();
         }
@@ -147,7 +147,7 @@ export const FormModal: React.FC<userFormsProps> = ({
               email: data?.loginUser?.user?.email,
             },
           };
-          Cookie.set("token", data?.loginUser?.token);
+          Cookie.set("token", data?.loginUser?.token, { expires: 1 });
           loginUserMethod(newUser);
           toast(data.loginUser.message, "success", 2000);
           handleModalClose();

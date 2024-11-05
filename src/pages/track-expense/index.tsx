@@ -7,8 +7,10 @@ const TrackExpense = () => {
   const { user, userLoading } = useUser();
   const router = useRouter();
   const { toast } = useToast();
-  console.log(user, userLoading);
+  // console.log(user, userLoading);
+
   useEffect(() => {
+    console.log("user");
     if (!userLoading) {
       if (!user) {
         console.log("No User");

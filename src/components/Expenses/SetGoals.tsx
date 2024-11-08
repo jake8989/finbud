@@ -11,6 +11,7 @@ import React from "react";
 import { GoalType } from "@/utils/types";
 import { isGoalDataOkay } from "@/utils/goalDataChecker";
 import { useToast } from "@/context/customToastContext";
+import { MutationAddNewGoalArgs } from "@/__generated__/graphql";
 const SetGoals = () => {
   const startMinimumDateRef = useRef<HTMLInputElement | null>(null);
   const { user } = useUser();
@@ -22,7 +23,7 @@ const SetGoals = () => {
 
   // goalFormData
   const [goalFormData, setGoalFormData] = React.useState<GoalType>({
-    goalAmount: undefined,
+    goalAmount: "",
     goalCategory: "",
     goalEndDate: "",
     goalStartDate: "",
@@ -39,7 +40,7 @@ const SetGoals = () => {
   };
   const { toast } = useToast();
   //backend integration
-  const handleGoalSubmit = () => {
+  const handleGoalSubmit = async () => {
     if (isGoalDataOkay(goalFormData) == "ErrorEmpty") {
       toast("Empty Fields in goal!", "warning", 2000);
       return;
@@ -53,6 +54,48 @@ const SetGoals = () => {
       return;
     }
     if (isGoalDataOkay(goalFormData) == "Success") {
+      console.log("Hi");
+      setGoalFormData({
+        goalAmount: "",
+        goalCategory: "",
+        goalEndDate: "",
+        goalStartDate: "",
+        goalType: "",
+        goalDescription: "",
+        goalReminderFreq: "",
+      });
+      try {
+        // console.log(goalInput);
+        // backend request
+        const { data } = await addNewGoal({
+          variables: {
+            goal: {
+              username: user?.user?.username,
+              goalAmount: Number(goalFormData.goalAmount),
+              goalCategory: goalFormData.goalCategory,
+              goalStartDate: new Date(goalFormData.goalStartDate)
+                .toISOString()
+                .split("T")[0],
+              goalEndDate: new Date(goalFormData.goalEndDate)
+                .toISOString()
+                .split("T")[0],
+              goalDescription: goalFormData.goalDescription,
+              goalType: goalFormData.goalType,
+              goalReminderFreq: goalFormData.goalReminderFreq,
+            },
+          },
+        });
+        // console.log(data);
+        if (data.addNewGoal.success) {
+          toast(data?.addNewGoal?.message, "success", 2000);
+        }
+        if (!data.addNewGoal.success || addNewGoalError) {
+          toast("Server Not working!", "info", 2000);
+        }
+      } catch (error) {
+        toast("Server Not working!", "info", 2000);
+        console.log(error);
+      }
     }
   };
   const {
@@ -76,7 +119,7 @@ const SetGoals = () => {
   useEffect(() => {
     setMinDate();
   }, []);
-  if (ExpenseCategoryLoading) {
+  if (ExpenseCategoryLoading || addNewGoalLoading) {
     return (
       <div className="flex justify-center items-center h-full">
         <span className="loading loading-ring loading-lg"></span>
@@ -93,7 +136,6 @@ const SetGoals = () => {
               Set your finacial goal's specify the dates, we will remind you
               about it!
             </p>
-
             <label className="input input-bordered flex items-center gap-2 mt-1.5">
               <Image
                 src={"/rupees.svg"}
@@ -107,6 +149,7 @@ const SetGoals = () => {
                 placeholder="Amount"
                 name="goalAmount"
                 onChange={handleOnChange}
+                value={goalFormData.goalAmount}
               />
             </label>
             <label className="input input-bordered flex items-center gap-2 mt-1.5">
@@ -125,6 +168,7 @@ const SetGoals = () => {
                 placeholder="Description"
                 name="goalDescription"
                 onChange={handleOnChange}
+                value={goalFormData.goalDescription}
               />
             </label>
             <label htmlFor="start-date" className="text-sm font-medium">
@@ -140,6 +184,7 @@ const SetGoals = () => {
                 ref={startMinimumDateRef}
                 name="goalStartDate"
                 onChange={handleOnChange}
+                value={goalFormData.goalStartDate}
               />
             </label>
             <label htmlFor="start-date" className="text-sm font-medium">
@@ -154,15 +199,16 @@ const SetGoals = () => {
                 name="goalEndDate"
                 ref={startMinimumDateRef}
                 onChange={handleOnChange}
+                value={goalFormData.goalEndDate}
               />
             </label>
-
             <select
               className="select select-bordered w-full max-w-xs mt-1.5"
               name="goalCategory"
               onChange={handleOnChange}
+              value={goalFormData.goalCategory}
             >
-              <option disabled selected>
+              <option disabled value="">
                 Select Category of Goal
               </option>
               {expenseCategories.map((expense) => (
@@ -175,34 +221,36 @@ const SetGoals = () => {
               className="select select-bordered w-full max-w-xs mt-1.5"
               name="goalType"
               onChange={handleOnChange}
+              value={goalFormData.goalType}
             >
-              <option disabled selected>
+              <option disabled value="">
                 Choose Goal Type
               </option>
-              <option>Saving Goal</option>
-              <option>Spending Goal</option>
+              <option value={"Saving Goal"}>Saving Goal</option>
+              <option value={"Spending Goal"}>Spending Goal</option>
             </select>
             <select
               className="select select-bordered w-full max-w-xs mt-1.5"
               name="goalReminderFreq"
+              value={goalFormData.goalReminderFreq} // Bind to the current state
               onChange={handleOnChange}
             >
-              <option disabled selected>
+              <option disabled value="">
                 Choose your Reminder frequency
               </option>
-              <option>Daily</option>
-              <option>Weekly</option>
-              <option>Monthly</option>
-              <option>Yearly</option>
+              <option value="Daily">Daily</option>
+              <option value="Weekly">Weekly</option>
+              <option value="Monthly">Monthly</option>
+              <option value="Yearly">Yearly</option>
             </select>
 
             <div className="card-actions justify-end">
               <button
                 className="btn btn-primary mt-1.5"
-                disabled={false}
+                disabled={addNewGoalLoading || ExpenseCategoryLoading}
                 onClick={handleGoalSubmit}
               >
-                Meowww
+                {addNewGoalLoading ? "Loading..." : "Meowww"}
               </button>
             </div>
           </div>

@@ -27,11 +27,11 @@ export type ExpenseType = {
 };
 
 export type GoalType = {
-  goalAmount: number | undefined;
-  goalCategory: string;
+  goalAmount: number | undefined | string;
+  goalCategory: undefined | string;
   goalStartDate: string;
   goalEndDate: string;
   goalDescription: string;
-  goalType: string;
-  goalReminderFreq: string;
+  goalType: undefined | string;
+  goalReminderFreq: undefined | string;
 };

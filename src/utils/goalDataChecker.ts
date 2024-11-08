@@ -1,7 +1,7 @@
 import { GoalType } from "./types";
 export const isGoalDataOkay = (goalData: GoalType) => {
   //
-  //   console.log(goalData);
+  // console.log(goalData);
   const {
     goalAmount,
     goalCategory,
@@ -29,7 +29,10 @@ export const isGoalDataOkay = (goalData: GoalType) => {
   const [edyear, edmonth, edday] = goalEndDate.split("-").map(Number);
 
   //check for start date and end date of the goal
-  if (sdyear > edyear || sdmonth > edmonth || sdday > edday) {
+  if (sdyear > edyear || sdmonth > edmonth) {
+    return "ErrorDate";
+  }
+  if (sdmonth === edmonth && sdday > edday) {
     return "ErrorDate";
   }
   return "Success";

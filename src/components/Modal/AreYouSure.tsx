@@ -30,31 +30,31 @@ const AreYouSure: React.FC<DeleteGoalProps> = ({
   const { toast } = useToast();
   const { refetchGoals } = FetchallUserGoals(user?.user?.username);
   const [deleteGoal, { data, loading, error }] = useMutation(DELETEGOAL, {
-    // update(cache, { data: { deleteGoal } }) {
-    //   if (deleteGoal?.success) {
-    //     const existingGoals: any = cache.readQuery({
-    //       query: GET_ALL_USER_GOALS,
-    //       variables: { username: user?.user?.username },
-    //     });
-    //     if (!existingGoals || !existingGoals.getAllUserGoals?.allUserGoals) {
-    //       return;
-    //     }
-    //     const newGoals = existingGoals.getAllUserGoals?.allUserGoals.filter(
-    //       (goal) => goal.goalId != goalIdToBeDeleted
-    //     );
-    //     cache.writeQuery({
-    //       query: GET_ALL_USER_GOALS,
-    //       variables: { username: user?.user?.username },
-    //       data: {
-    //         getAllUserGoals: {
-    //           success: deleteGoal.success,
-    //           message: deleteGoal.message,
-    //           allUserGoals: newGoals,
-    //         },
-    //       },
-    //     });
-    //   }
-    // },
+    update(cache, { data: { deleteGoal } }) {
+      if (deleteGoal?.success) {
+        const existingGoals: any = cache.readQuery({
+          query: GET_ALL_USER_GOALS,
+          variables: { username: user?.user?.username },
+        });
+        if (!existingGoals || !existingGoals.getAllUserGoals?.allUserGoals) {
+          return;
+        }
+        const newGoals = existingGoals.getAllUserGoals?.allUserGoals.filter(
+          (goal) => goal.goalId != goalIdToBeDeleted
+        );
+        cache.writeQuery({
+          query: GET_ALL_USER_GOALS,
+          variables: { username: user?.user?.username },
+          data: {
+            getAllUserGoals: {
+              success: deleteGoal.success,
+              message: deleteGoal.message,
+              allUserGoals: newGoals,
+            },
+          },
+        });
+      }
+    },
     onCompleted: () => {
       refetchGoals();
     },

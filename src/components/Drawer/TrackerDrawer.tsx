@@ -8,6 +8,7 @@ import { useUser } from "@/context/userContext";
 import ExpenseCategories from "../Expenses/ExpenseCategories";
 import { useRouter } from "next/router";
 import { useToast } from "@/context/customToastContext";
+import AddIncome from "../Income/AddIncome";
 const TrackerDrawer = () => {
   const [whichComponent, setWhichComponent] = useState("Dashboard");
   const [loading, setLoading] = useState(true);
@@ -41,6 +42,8 @@ const TrackerDrawer = () => {
       case "AddExp": {
         return <AddExp />;
       }
+      case "AddIncome":
+        return <AddIncome />;
       case "SetGoals": {
         return <SetGoals />;
       }
@@ -61,6 +64,10 @@ const TrackerDrawer = () => {
       setLoading(true);
       Cookies.set("expense-panel", "AddExp", { expires: 7 });
       setWhichComponent("AddExp");
+    } else if (panel == "AddIncome") {
+      setLoading(true);
+      Cookies.set("expense-panel", "AddIncome", { expires: 7 });
+      setWhichComponent("AddIncome");
     } else if (panel == "SetGoals") {
       setLoading(true);
       Cookies.set("expense-panel", "SetGoals", { expires: 7 });
@@ -113,6 +120,14 @@ const TrackerDrawer = () => {
               onClick={() => handlePanelChange("AddExp")}
             >
               Add Expense
+            </button>
+          </li>
+          <li>
+            <button
+              className="btn btn-ghost"
+              onClick={() => handlePanelChange("AddIncome")}
+            >
+              Add Income
             </button>
           </li>
           <li>

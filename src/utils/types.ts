@@ -26,6 +26,12 @@ export type ExpenseType = {
   expenseDate: string | undefined;
 };
 
+export type IncomeType = {
+  amount: number | undefined | string;
+  category: string;
+  description: string;
+  incomeDate: string | undefined;
+};
 export type GoalType = {
   goalAmount: number | undefined | string;
   goalCategory: undefined | string;

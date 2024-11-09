@@ -10,8 +10,10 @@ import { useToast } from "@/context/customToastContext";
   <div className="bg-neutral text-neutral-content w-12 rounded-full">
     <span>SY</span>
   </div>
-</div> */
+</div>
+ */
 }
+import { useRouter } from "next/router";
 const Navbar = () => {
   const { theme, toggleTheme } = useTheme();
   const { user, userLoading, logoutUserMethod } = useUser();
@@ -26,6 +28,7 @@ const Navbar = () => {
   const handleClose = () => {
     setUserFormType(undefined);
   };
+  const router = useRouter();
   if (userLoading) {
     return (
       <div className="flex justify-end items-center mt-[20px]">
@@ -40,7 +43,7 @@ const Navbar = () => {
   return (
     <div className="navbar bg-base-100">
       <div className="flex-1">
-        <a className="btn btn-ghost text-2xl">
+        <a className="btn btn-ghost text-2xl" onClick={() => router.push("/")}>
           <Image src="logo.svg" height={40} width={40} alt="322"></Image>
           FinBud
         </a>

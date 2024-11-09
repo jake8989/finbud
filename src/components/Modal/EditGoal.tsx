@@ -99,7 +99,8 @@ const EditGoal: React.FC<EditGoalProps> = ({ isOpen, handleClose, goalId }) => {
         },
       },
     });
-    toast(data?.editGoal?.message, "success", 4000);
+    if (data.editGoal.success)
+      toast("Goal Updated Successfully!", "success", 4000);
     handleClose();
   };
 

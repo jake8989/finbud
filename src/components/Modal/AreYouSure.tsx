@@ -98,7 +98,11 @@ const AreYouSure: React.FC<DeleteGoalProps> = ({
             >
               {loading ? "Loading..." : " Okay! Delete It"}
             </button>
-            <button className="btn ml-2" onClick={handleModals}>
+            <button
+              className="btn ml-2"
+              onClick={handleModals}
+              disabled={loading}
+            >
               Close
             </button>
           </div>

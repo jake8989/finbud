@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { useState } from "react";
 import {
   Chart,
   CategoryScale,
@@ -24,8 +25,9 @@ Chart.register(
 const DashboardMonthlyExpenseChart = () => {
   const chartRef = useRef<Chart | null>(null);
   const DATA_COUNT = 12;
-  const NUMBER_CFG = { count: DATA_COUNT, min: 0, max: 3000000 };
-
+  const NUMBER_CFG = { count: DATA_COUNT, min: 0, max: 100000 };
+  const [expenseData, setExpenseData] = useState<number[]>(Array(12).fill(100));
+  const [incomeData, setIncomeData] = useState<number[]>(Array(12).fill(400));
   const labels = [
     "January",
     "February",
@@ -45,23 +47,15 @@ const DashboardMonthlyExpenseChart = () => {
     datasets: [
       {
         label: "Expense",
-        data: Array.from({ length: DATA_COUNT }, () =>
-          Math.floor(
-            Math.random() * (NUMBER_CFG.max - NUMBER_CFG.min) + NUMBER_CFG.min
-          )
-        ),
-        borderColor: "rgb(255, 99, 132)", // Red
-        backgroundColor: "rgba(255, 99, 132, 0.5)", // Transparent red
+        data: expenseData,
+        borderColor: "rgb(255, 99, 132)",
+        backgroundColor: "rgba(255, 99, 132, 0.5)",
       },
       {
         label: "Income",
-        data: Array.from({ length: DATA_COUNT }, () =>
-          Math.floor(
-            Math.random() * (NUMBER_CFG.max - NUMBER_CFG.min) + NUMBER_CFG.min
-          )
-        ),
-        borderColor: "rgb(54, 162, 235)", // Blue
-        backgroundColor: "rgba(54, 162, 235, 0.5)", // Transparent blue
+        data: incomeData,
+        borderColor: "rgb(54, 162, 235)",
+        backgroundColor: "rgba(54, 162, 235, 0.5)",
       },
     ],
   };

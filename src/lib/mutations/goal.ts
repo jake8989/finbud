@@ -21,7 +21,7 @@ export const ADDNEWGOAL = gql`
   }
 `;
 
-export const DELETENEWGOAL = gql`
+export const DELETEGOAL = gql`
   mutation DeleteGoal($goal: DeleteGoalInputType!) {
     deleteGoal(goal: $goal) {
       success

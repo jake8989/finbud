@@ -129,7 +129,7 @@ export const FetchExpenseCategories = (username: string) => {
     GET_ALL_EXPENSES_CATEGORIES,
     {
       variables: { username },
-      fetchPolicy: "network-only",
+      fetchPolicy: "cache-first",
     }
   );
 

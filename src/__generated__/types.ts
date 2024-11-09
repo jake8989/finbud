@@ -14,6 +14,12 @@ export type Scalars = {
   Float: { input: number; output: number; }
 };
 
+export type AllUserGoalsResponseType = {
+  __typename?: 'AllUserGoalsResponseType';
+  allUserGoals?: Maybe<Array<GoalType>>;
+  success: Scalars['Boolean']['output'];
+};
+
 export type DeleteGoalInputType = {
   goalId: Scalars['String']['input'];
   username: Scalars['String']['input'];
@@ -138,11 +144,17 @@ export type MutationRegisterUserArgs = {
 export type Query = {
   __typename?: 'Query';
   getAllExpenseCategories: ExpenseGetCategoriesResponseType;
+  getAllUserGoals: AllUserGoalsResponseType;
   testQuery: Scalars['String']['output'];
 };
 
 
 export type QueryGetAllExpenseCategoriesArgs = {
+  username: Scalars['String']['input'];
+};
+
+
+export type QueryGetAllUserGoalsArgs = {
   username: Scalars['String']['input'];
 };
 

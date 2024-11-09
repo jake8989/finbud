@@ -6,20 +6,26 @@ import { ChangeEvent, useEffect, useRef } from "react";
 import { useUser } from "@/context/userContext";
 import { FetchExpenseCategories } from "@/data/expenseCategories";
 import { useMutation } from "@apollo/client";
-import { ADDNEWGOAL, EDITGOAL, DELETENEWGOAL } from "@/lib/mutations/goal";
+import { ADDNEWGOAL } from "@/lib/mutations/goal";
 import React from "react";
 import { GoalType } from "@/utils/types";
 import { isGoalDataOkay } from "@/utils/goalDataChecker";
 import { useToast } from "@/context/customToastContext";
 import { MutationAddNewGoalArgs } from "@/__generated__/graphql";
+import { FetchallUserGoals } from "@/data/allUserGoals";
 const SetGoals = () => {
   const startMinimumDateRef = useRef<HTMLInputElement | null>(null);
   const { user } = useUser();
   //data mutations
+  const { refetchGoals } = FetchallUserGoals(user?.user?.username);
   const [
     addNewGoal,
     { data, loading: addNewGoalLoading, error: addNewGoalError },
-  ] = useMutation(ADDNEWGOAL);
+  ] = useMutation(ADDNEWGOAL, {
+    onCompleted: () => {
+      refetchGoals();
+    },
+  });
 
   // goalFormData
   const [goalFormData, setGoalFormData] = React.useState<GoalType>({

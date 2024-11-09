@@ -4,14 +4,21 @@ import { useUser } from "@/context/userContext";
 import React, { ChangeEvent } from "react";
 import { useToast } from "@/context/customToastContext";
 import { MutationCreateExpenseCategoryArgs } from "@/__generated__/graphql";
+import { FetchExpenseCategories } from "@/data/expenseCategories";
 interface NewExpenseCategory {
   expenseCategory: string;
 }
 const ExpenseCategories = () => {
   const [createExpenseCategory, { data: ExpenseResponse, loading, error }] =
-    useMutation(CREATE_EXPENSE_CATEGORY);
+    useMutation(CREATE_EXPENSE_CATEGORY, {
+      onCompleted: () => {
+        //refetch again the expense categories
+        refetch();
+      },
+    });
   const { user } = useUser();
   const { toast } = useToast();
+  const { refetch } = FetchExpenseCategories(user?.user?.username);
   const [newExpenseCategory, setNewExpenseCategory] =
     React.useState<NewExpenseCategory>({ expenseCategory: "" });
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {

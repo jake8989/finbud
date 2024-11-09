@@ -16,7 +16,7 @@ const AreYouSure: React.FC<DeleteGoalProps> = ({
     handleSureClose();
     handleClose();
   };
-  console.log(goalIdToBeDeleted);
+  // console.log(goalIdToBeDeleted);
   return (
     <>
       <dialog

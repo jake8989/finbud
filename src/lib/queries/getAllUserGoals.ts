@@ -1,10 +1,19 @@
 import { gql } from "@apollo/client";
 
-const GET_ALL_USES_GOALS = gql`
+export const GET_ALL_USER_GOALS = gql`
   query GetAllGolas($username: String!) {
-    getAllGoals(username: $username) {
+    getAllUserGoals(username: $username) {
       success
-      allUserGoals
+      allUserGoals {
+        goalId
+        goalAmount
+        goalDescription
+        goalStartDate
+        goalEndDate
+        goalCategory
+        goalType
+        goalReminderFreq
+      }
     }
   }
 `;

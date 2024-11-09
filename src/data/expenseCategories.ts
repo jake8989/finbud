@@ -125,10 +125,13 @@ import { GET_ALL_EXPENSES_CATEGORIES } from "@/lib/queries/getAllexpenseCategori
 
 export const FetchExpenseCategories = (username: string) => {
   const [expenseCategories, setExpenseCategories] = useState([]);
-  const { data, loading, error } = useQuery(GET_ALL_EXPENSES_CATEGORIES, {
-    variables: { username },
-    fetchPolicy: "cache-first",
-  });
+  const { data, loading, error, refetch } = useQuery(
+    GET_ALL_EXPENSES_CATEGORIES,
+    {
+      variables: { username },
+      fetchPolicy: "network-only",
+    }
+  );
 
   useEffect(() => {
     if (data && data.getAllExpenseCategories.success) {
@@ -139,5 +142,5 @@ export const FetchExpenseCategories = (username: string) => {
     }
   }, [data]);
 
-  return { expenseCategories, loading, error };
+  return { expenseCategories, loading, error, refetch };
 };

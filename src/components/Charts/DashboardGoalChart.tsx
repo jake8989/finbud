@@ -28,7 +28,7 @@ const DashboardGoalChart = () => {
     return <Loading></Loading>;
   }
   if (error || data.getAllUserGoals.success == false) {
-    return <h1>Error Loading Goals Please login again to continue...</h1>;
+    return <h1>Error Loading Goals Please login again to continue!</h1>;
   }
   return (
     <>

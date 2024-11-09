@@ -35,3 +35,9 @@ export type GoalType = {
   goalType: undefined | string;
   goalReminderFreq: undefined | string;
 };
+
+export type EditGoalFormType = {
+  goalAmount: string | null | number;
+  goalDescription: string | null;
+  goalEndDate: string | null;
+};

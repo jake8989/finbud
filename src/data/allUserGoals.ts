@@ -2,6 +2,9 @@ import { useUser } from "@/context/userContext";
 import { useQuery } from "@apollo/client";
 import { GET_ALL_USER_GOALS } from "@/lib/queries/getAllUserGoals";
 export const FetchallUserGoals = (username: string) => {
+  if (username.trim() === "" || !username) {
+    return;
+  }
   //   console.log(username);
   const {
     data,

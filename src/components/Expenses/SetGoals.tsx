@@ -96,7 +96,7 @@ const SetGoals = () => {
           toast(data?.addNewGoal?.message, "success", 2000);
         }
         if (!data.addNewGoal.success || addNewGoalError) {
-          toast("Server Not working!", "info", 2000);
+          toast(data.addNewGoal.message, "info", 2000);
         }
       } catch (error) {
         toast("Server Not working!", "info", 2000);
@@ -232,7 +232,7 @@ const SetGoals = () => {
               <option disabled value="">
                 Choose Goal Type
               </option>
-              <option value={"Saving Goal"}>Saving Goal</option>
+              {/* <option value={"Saving Goal"}>Saving Goal</option> */}
               <option value={"Spending Goal"}>Spending Goal</option>
             </select>
             <select

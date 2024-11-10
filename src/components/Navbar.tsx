@@ -64,10 +64,10 @@ const Navbar = () => {
           >
             {/* Reminders */}
             <li>
-              <a>Lorem ipsum dolor sit amet consectetur adipisicing elit.</a>
+              <a>Saving Goals is upcoming feature...</a>
             </li>
             <li>
-              <a>Lorem ipsum dolor sit amet consectetur adipisicing elit.</a>
+              <a>Systematic reports are upcoming feature...</a>
             </li>
           </ul>
         </div>

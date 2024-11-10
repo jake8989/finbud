@@ -30,6 +30,16 @@ const DashboardGoalChart = () => {
   if (!data || error) {
     return <h1>Error Loading Goals Please login again to continue!</h1>;
   }
+  if (!data.getAllUserGoals.success) {
+    return <h1>Something went wrong please login again!</h1>;
+  }
+  if (data && data?.getAllUserGoals?.allUserGoals?.length == 0) {
+    return (
+      <p className="text-center m-[50px]">
+        Currently no goals available! you can have at most 6 goals
+      </p>
+    );
+  }
   if (error || data?.getAllUserGoals?.success == false) {
     return <h1>Error Loading Goals Please login again to continue!</h1>;
   }
@@ -60,7 +70,7 @@ const DashboardGoalChart = () => {
 
             <div className="card-body items-center text-center">
               <h2 className="card-title">Goal {goal.goalId}</h2>
-              <p className="text-[12px]">{goal.goalDescription}</p>
+              {/* <p className="text-[12px]">{goal.goalDescription}</p> */}
               {goal.goalType === "Spending Goal" && (
                 <div className="badge badge-error gap-2">
                   <svg
@@ -113,6 +123,11 @@ const DashboardGoalChart = () => {
                 </p>
                 <p className="text-[11px]">
                   <strong>End Date: {goal.goalEndDate}</strong>{" "}
+                </p>
+                <p className="text-[11px] mt-[10px]">
+                  <div className="badge badge-primary badge-outline">
+                    Goal Category: {goal.goalCategory}
+                  </div>
                 </p>
               </p>
             </div>

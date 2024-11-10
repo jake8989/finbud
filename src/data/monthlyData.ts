@@ -22,7 +22,7 @@ export const useFetchMonthlyData = (year: string, username: string) => {
         year: year,
       },
     },
-    fetchPolicy: "cache-and-network",
+    fetchPolicy: "cache-first",
     skip: shouldSkipQuery || !username,
   });
 

@@ -8,9 +8,13 @@ import { useToast } from "@/context/customToastContext";
 import { IncomeType } from "@/utils/types";
 import { describe } from "node:test";
 import { useFetchMonthlyData } from "@/data/monthlyData";
+import { FetchallUserGoals } from "@/data/allUserGoals";
+import { useRef, useEffect } from "react";
 const AddIncome = () => {
+  const startMinimumDateRef = useRef<HTMLInputElement | null>(null);
   const { user } = useUser();
   const { toast } = useToast();
+  const { refetchGoals } = FetchallUserGoals(user?.user?.username);
   const currentYear = new Date().getFullYear().toString();
   const { refetchMonthlyData } = useFetchMonthlyData(
     currentYear,
@@ -23,6 +27,7 @@ const AddIncome = () => {
   ] = useMutation(ADD_INCOME, {
     onCompleted: () => {
       refetchMonthlyData();
+      refetchGoals();
     },
   });
   const { expenseCategories, loading: ExpenseCategoryLoading } =
@@ -84,6 +89,22 @@ const AddIncome = () => {
       toast(data?.addIncome?.message, "error", 3000);
     }
   };
+  const setMinDate = () => {
+    let date = new Date();
+    let month = date.getMonth().toString().padStart(2, "0");
+    let year = date.getFullYear().toString();
+    let day = date.getDate().toString().padStart(2, "0");
+
+    let today = `${year}-${month}-${day}`;
+    console.log(today);
+
+    if (startMinimumDateRef.current) {
+      startMinimumDateRef.current.setAttribute("min", today);
+    }
+  };
+  useEffect(() => {
+    setMinDate();
+  }, []);
   if (ExpenseCategoryLoading) {
     return (
       <div className="flex justify-center items-center h-full">
@@ -139,6 +160,7 @@ const AddIncome = () => {
               name="incomeDate"
               onChange={handleOnChange}
               value={income.incomeDate}
+              ref={startMinimumDateRef}
             />
           </label>
 

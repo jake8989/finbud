@@ -7,16 +7,26 @@ import { ADD_INCOME } from "@/lib/mutations/createIncome";
 import { useToast } from "@/context/customToastContext";
 import { IncomeType } from "@/utils/types";
 import { describe } from "node:test";
+import { useFetchMonthlyData } from "@/data/monthlyData";
 const AddIncome = () => {
   const { user } = useUser();
   const { toast } = useToast();
+  const currentYear = new Date().getFullYear().toString();
+  const { refetchMonthlyData } = useFetchMonthlyData(
+    currentYear,
+    user?.user?.username
+  );
+  // console.log(expenseCategories);
   const [
     addIncome,
     { data, loading: AddIncomeLoading, error: AddIncomeError },
-  ] = useMutation(ADD_INCOME);
+  ] = useMutation(ADD_INCOME, {
+    onCompleted: () => {
+      refetchMonthlyData();
+    },
+  });
   const { expenseCategories, loading: ExpenseCategoryLoading } =
     FetchExpenseCategories(user?.user?.username);
-  // console.log(expenseCategories);
   const [income, setIncome] = React.useState<IncomeType>({
     amount: undefined,
     category: "",

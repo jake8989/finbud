@@ -20,14 +20,23 @@ Chart.register(
   BarElement,
   BarController
 );
+import { Loading } from "../Loading/Loading";
+import { useUser } from "@/context/userContext";
 
-// Component for the Chart
+import { useFetchMonthlyData } from "@/data/monthlyData";
 const DashboardMonthlyExpenseChart = () => {
+  const { user, userLoading } = useUser();
   const chartRef = useRef<Chart | null>(null);
   const DATA_COUNT = 12;
   const NUMBER_CFG = { count: DATA_COUNT, min: 0, max: 100000 };
-  const [expenseData, setExpenseData] = useState<number[]>(Array(12).fill(100));
-  const [incomeData, setIncomeData] = useState<number[]>(Array(12).fill(400));
+  if (userLoading) {
+    return "";
+  }
+  const currentYear = new Date().getFullYear().toString();
+  const { loading, error, incomeData, expenseData } = useFetchMonthlyData(
+    currentYear,
+    user?.user?.username
+  );
   const labels = [
     "January",
     "February",
@@ -42,6 +51,7 @@ const DashboardMonthlyExpenseChart = () => {
     "November",
     "December",
   ];
+
   const data = {
     labels: labels,
     datasets: [
@@ -60,6 +70,9 @@ const DashboardMonthlyExpenseChart = () => {
     ],
   };
   useEffect(() => {
+    if (loading || userLoading || !incomeData || !expenseData) {
+      return;
+    }
     const ctx = document.getElementById(
       "dashboardmonthlyexpensechart"
     ) as HTMLCanvasElement;
@@ -92,8 +105,10 @@ const DashboardMonthlyExpenseChart = () => {
         chartRef.current.destroy();
       }
     };
-  }, []);
-
+  }, [loading, userLoading, incomeData, expenseData]);
+  if (loading) {
+    return <Loading></Loading>;
+  }
   return <canvas id="dashboardmonthlyexpensechart"></canvas>;
 };
 

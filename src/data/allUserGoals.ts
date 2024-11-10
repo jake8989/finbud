@@ -2,10 +2,8 @@ import { useUser } from "@/context/userContext";
 import { useQuery } from "@apollo/client";
 import { GET_ALL_USER_GOALS } from "@/lib/queries/getAllUserGoals";
 export const FetchallUserGoals = (username: string) => {
-  if (username.trim() === "" || !username) {
-    return;
-  }
   //   console.log(username);
+
   const {
     data,
     loading,
@@ -14,6 +12,7 @@ export const FetchallUserGoals = (username: string) => {
   } = useQuery(GET_ALL_USER_GOALS, {
     variables: { username: username },
     fetchPolicy: "cache-first",
+    skip: !username,
   });
   //   const success = data.getAllUserGoals.success;
   return { data, loading, error, refetchGoals };

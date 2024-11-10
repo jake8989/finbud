@@ -27,7 +27,10 @@ const DashboardGoalChart = () => {
   if (loading) {
     return <Loading></Loading>;
   }
-  if (error || data.getAllUserGoals.success == false) {
+  if (!data || error) {
+    return <h1>Error Loading Goals Please login again to continue!</h1>;
+  }
+  if (error || data?.getAllUserGoals?.success == false) {
     return <h1>Error Loading Goals Please login again to continue!</h1>;
   }
   return (

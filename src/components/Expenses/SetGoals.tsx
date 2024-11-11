@@ -61,15 +61,7 @@ const SetGoals = () => {
     }
     if (isGoalDataOkay(goalFormData) == "Success") {
       console.log("Hi");
-      setGoalFormData({
-        goalAmount: "",
-        goalCategory: "",
-        goalEndDate: "",
-        goalStartDate: "",
-        goalType: "",
-        goalDescription: "",
-        goalReminderFreq: "",
-      });
+
       try {
         // console.log(goalInput);
         // backend request
@@ -94,6 +86,15 @@ const SetGoals = () => {
         // console.log(data);
         if (data.addNewGoal.success) {
           toast(data?.addNewGoal?.message, "success", 2000);
+          setGoalFormData({
+            goalAmount: "",
+            goalCategory: "",
+            goalEndDate: "",
+            goalStartDate: "",
+            goalType: "",
+            goalDescription: "",
+            goalReminderFreq: "",
+          });
         }
         if (!data.addNewGoal.success || addNewGoalError) {
           toast(data.addNewGoal.message, "info", 2000);

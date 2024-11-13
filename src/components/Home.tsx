@@ -20,7 +20,7 @@ export const HomePage: React.FC = () => {
 
   return (
     <>
-      <div className="flex flex-col justify-center items-center md:flex-row md:mt-40">
+      <div className="flex flex-col justify-center md:flex-row  min-h-[80vh]">
         {/* Left Section: Text */}
         <div className="flex flex-col justify-center items-center md:w-1/2">
           <h1 className="text-5xl text-center p-6">
@@ -55,7 +55,8 @@ export const HomePage: React.FC = () => {
           />
         </div>
       </div>
-      {/* <Footer></Footer> */}
+      <Footer></Footer>
+      {/* <ContactForm></ContactForm> */}
     </>
   );
 };

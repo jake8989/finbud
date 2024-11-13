@@ -47,3 +47,9 @@ export type EditGoalFormType = {
   goalDescription: string | null;
   goalEndDate: string | null;
 };
+
+export type FeedBackFormType = {
+  feedbackUserEmail: string;
+  feedbackUserSubject: string | undefined | null;
+  feedbackUserMessage: string;
+};

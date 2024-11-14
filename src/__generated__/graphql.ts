@@ -28,6 +28,13 @@ export type Scalars = {
   Float: { input: number; output: number };
 };
 
+export type AddIncomeResponseType = {
+  __typename?: "AddIncomeResponseType";
+  incomeId?: Maybe<Scalars["String"]["output"]>;
+  message: Scalars["String"]["output"];
+  success: Scalars["Boolean"]["output"];
+};
+
 export type AllUserGoalsResponseType = {
   __typename?: "AllUserGoalsResponseType";
   allUserGoals?: Maybe<Array<GoalType>>;
@@ -79,6 +86,18 @@ export type ExpenseResponseType = {
   success: Scalars["Boolean"]["output"];
 };
 
+export type FeedBackInputType = {
+  feedbackUserEmail: Scalars["String"]["input"];
+  feedbackUserMessage: Scalars["String"]["input"];
+  feedbackUserSubject?: InputMaybe<Scalars["String"]["input"]>;
+};
+
+export type FeedBackResponseType = {
+  __typename?: "FeedBackResponseType";
+  message: Scalars["String"]["output"];
+  success: Scalars["Boolean"]["output"];
+};
+
 export type GoalInput = {
   goalAmount: Scalars["Int"]["input"];
   goalCategory: Scalars["String"]["input"];
@@ -109,15 +128,29 @@ export type GoalType = {
   goalType: Scalars["String"]["output"];
 };
 
+export type IncomeInputType = {
+  amount: Scalars["Int"]["input"];
+  category: Scalars["String"]["input"];
+  description: Scalars["String"]["input"];
+  incomeDate: Scalars["String"]["input"];
+  username: Scalars["String"]["input"];
+};
+
 export type Mutation = {
   __typename?: "Mutation";
+  addIncome: AddIncomeResponseType;
   addNewGoal: GoalReponseType;
   createExpense: ExpenseResponseType;
   createExpenseCategory: ExpenseCategoryResponse;
   deleteGoal: GoalReponseType;
   editGoal: GoalReponseType;
   loginUser: UserMutationResponse;
+  newFeedBack: FeedBackResponseType;
   registerUser: UserMutationResponse;
+};
+
+export type MutationAddIncomeArgs = {
+  income: IncomeInputType;
 };
 
 export type MutationAddNewGoalArgs = {
@@ -144,15 +177,25 @@ export type MutationLoginUserArgs = {
   user: UserLoginInput;
 };
 
+export type MutationNewFeedBackArgs = {
+  feedback: FeedBackInputType;
+};
+
 export type MutationRegisterUserArgs = {
   user: UserInput;
 };
 
 export type Query = {
   __typename?: "Query";
+  getAccumulatedData: AccumulatedDataResponseType;
   getAllExpenseCategories: ExpenseGetCategoriesResponseType;
   getAllUserGoals: AllUserGoalsResponseType;
+  getCategoryWiseExpenseData: CategoryWiseMonthlyExpensesResponse;
   testQuery: Scalars["String"]["output"];
+};
+
+export type QueryGetAccumulatedDataArgs = {
+  data: AccumulatedDataInput;
 };
 
 export type QueryGetAllExpenseCategoriesArgs = {
@@ -161,6 +204,10 @@ export type QueryGetAllExpenseCategoriesArgs = {
 
 export type QueryGetAllUserGoalsArgs = {
   username: Scalars["String"]["input"];
+};
+
+export type QueryGetCategoryWiseExpenseDataArgs = {
+  data: AccumulatedDataInput;
 };
 
 export type UserInput = {
@@ -186,6 +233,32 @@ export type UserType = {
   __typename?: "UserType";
   email: Scalars["String"]["output"];
   username: Scalars["String"]["output"];
+};
+
+export type AccumulatedDataInput = {
+  username: Scalars["String"]["input"];
+  year: Scalars["String"]["input"];
+};
+
+export type AccumulatedDataResponseType = {
+  __typename?: "accumulatedDataResponseType";
+  expense?: Maybe<Array<Scalars["Int"]["output"]>>;
+  income?: Maybe<Array<Scalars["Int"]["output"]>>;
+  message: Scalars["String"]["output"];
+  success: Scalars["Boolean"]["output"];
+};
+
+export type CategoryWiseMonthlyExpensesResponse = {
+  __typename?: "categoryWiseMonthlyExpensesResponse";
+  categoryWiseExpenses?: Maybe<Array<CateogoryWiseExpense>>;
+  message: Scalars["String"]["output"];
+  success: Scalars["Boolean"]["output"];
+};
+
+export type CateogoryWiseExpense = {
+  __typename?: "cateogoryWiseExpense";
+  data: Array<Scalars["Int"]["output"]>;
+  label: Scalars["String"]["output"];
 };
 
 /** All built-in and custom scalars, mapped to their actual values */

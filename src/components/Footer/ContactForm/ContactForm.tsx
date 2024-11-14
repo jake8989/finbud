@@ -3,6 +3,7 @@ import { useMutation } from "@apollo/client";
 import { NEW_FEEDBACK } from "@/lib/mutations/newFeedBack";
 import { FeedBackFormType } from "@/utils/types";
 import { useToast } from "@/context/customToastContext";
+import { Loading } from "@/components/Loading/Loading";
 // import { Loading } from "@/components/Loading/Loading";
 export const ContactForm = () => {
   const [feedbackForm, setFeedbackForm] = React.useState<FeedBackFormType>({
@@ -43,7 +44,7 @@ export const ContactForm = () => {
         },
       },
     });
-    if (data.newFeedBack.success) {
+    if (data?.newFeedBack?.success) {
       setFeedbackForm({
         ...feedbackForm,
         feedbackUserEmail: "",
@@ -51,14 +52,14 @@ export const ContactForm = () => {
         feedbackUserSubject: "",
       });
       toast(
-        data.newFeedBack.message
-          ? data.newFeedBack.message
+        data?.newFeedBack?.message
+          ? data?.newFeedBack?.message
           : "FeedBack Received!",
         "success",
         3000
       );
     }
-    if (!data.newFeedBack.success) {
+    if (!data?.newFeedBack?.success) {
       toast(
         "  Server is not responding! Sorry for the inconvenience.",
         "error",
@@ -66,7 +67,13 @@ export const ContactForm = () => {
       );
     }
   };
-
+  if (error) {
+    return (
+      <h1>
+        <Loading></Loading>
+      </h1>
+    );
+  }
   return (
     <>
       <div className="flex justify-center">

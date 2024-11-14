@@ -53,3 +53,8 @@ export type FeedBackFormType = {
   feedbackUserSubject: string | undefined | null;
   feedbackUserMessage: string;
 };
+
+export type categoryWiseExpenseData = {
+  label: string;
+  data: [number];
+};

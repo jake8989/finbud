@@ -10,17 +10,31 @@ import { useToast } from "@/context/customToastContext";
 import { execOnce } from "next/dist/shared/lib/utils";
 import { FetchallUserGoals } from "@/data/allUserGoals";
 import { useRef, useEffect } from "react";
+import { useFetchMonthlyExpenseData } from "@/data/monthlyExpenseData";
+import { useFetchMonthlyData } from "@/data/monthlyData";
 const AddExp = () => {
   const startMinimumDateRef = useRef<HTMLInputElement | null>(null);
   const { user } = useUser();
   const { toast } = useToast();
   const { refetchGoals } = FetchallUserGoals(user?.user?.username);
+  const year = new Date().getFullYear().toString();
+  const { refetchCategoryWiseExpense } = useFetchMonthlyExpenseData(
+    year,
+    user.user.username
+  );
+
+  const { refetchMonthlyData } = useFetchMonthlyData(
+    year,
+    user?.user?.username
+  );
   const [
     createExpense,
     { data: ExpenseData, loading: ExpenseLoading, error: ExpenseError },
   ] = useMutation(CREATE_EXPENSE, {
     onCompleted: () => {
       refetchGoals();
+      refetchCategoryWiseExpense();
+      refetchMonthlyData();
     },
   });
   const {
@@ -167,7 +181,7 @@ const AddExp = () => {
             onChange={handleOnChange}
             value={expense.category}
           >
-            <option disabled selected>
+            <option disabled value={""}>
               Select Category of Expense
             </option>
             {expenseCategories.map((expense) => (

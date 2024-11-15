@@ -18,7 +18,7 @@ export const useFetchMonthlyExpenseData = (year: string, username: string) => {
         username: username,
       },
     },
-    fetchPolicy: "cache-first",
+    fetchPolicy: "cache-and-network",
     skip: !username,
   });
 

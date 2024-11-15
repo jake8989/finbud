@@ -9,7 +9,7 @@ const cache = new InMemoryCache();
 
 if (typeof window !== "undefined") {
   import("apollo3-cache-persist").then(({ persistCache }) => {
-    localStorage.removeItem("apollo-cache-persist");
+    // localStorage.removeItem("apollo-cache-persist");
     persistCache({
       cache,
       storage: window.localStorage, // Use localStorage for persistence

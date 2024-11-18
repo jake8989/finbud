@@ -21,7 +21,14 @@ export const UserContextProvider: React.FC<{ children: ReactNode }> = ({
   React.useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
-      setUser(JSON.parse(storedUser));
+      try {
+        const parsedUser = JSON.parse(storedUser);
+        setUser(parsedUser);
+      } catch (error) {
+        console.error("Invalid JSON in localStorage 'user':", error);
+        localStorage.removeItem("user");
+        Cookies.remove("OTP_OPEN");
+      }
     }
     setUserLoading(false);
   }, []);

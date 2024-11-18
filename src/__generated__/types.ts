@@ -130,9 +130,11 @@ export type Mutation = {
   createExpenseCategory: ExpenseCategoryResponse;
   deleteGoal: GoalReponseType;
   editGoal: GoalReponseType;
+  generateAndSendOTP: OtpSendResponseType;
   loginUser: UserMutationResponse;
   newFeedBack: FeedBackResponseType;
   registerUser: UserMutationResponse;
+  verifyOTP: OtpSendResponseType;
 };
 
 
@@ -166,6 +168,11 @@ export type MutationEditGoalArgs = {
 };
 
 
+export type MutationGenerateAndSendOtpArgs = {
+  otp: OtPinput;
+};
+
+
 export type MutationLoginUserArgs = {
   user: UserLoginInput;
 };
@@ -178,6 +185,21 @@ export type MutationNewFeedBackArgs = {
 
 export type MutationRegisterUserArgs = {
   user: UserInput;
+};
+
+
+export type MutationVerifyOtpArgs = {
+  otp: VerifyOtpType;
+};
+
+export type OtpSendResponseType = {
+  __typename?: 'OTPSendResponseType';
+  message: Scalars['String']['output'];
+  success: Scalars['Boolean']['output'];
+};
+
+export type OtPinput = {
+  email: Scalars['String']['input'];
 };
 
 export type Query = {
@@ -232,6 +254,11 @@ export type UserType = {
   __typename?: 'UserType';
   email: Scalars['String']['output'];
   username: Scalars['String']['output'];
+};
+
+export type VerifyOtpType = {
+  email: Scalars['String']['input'];
+  otp: Scalars['String']['input'];
 };
 
 export type AccumulatedDataInput = {

@@ -1,6 +1,9 @@
 import Image from "next/image";
 import { ContactForm } from "./ContactForm/ContactForm";
+import { useRouter } from "next/router";
+//shoud add
 export const Footer = () => {
+  const router = useRouter();
   return (
     <footer className="footer bg-base-200 text-base-content p-10 flex flex-col md:flex-row md:items-start md:justify-between">
       <aside className="md:w-1/2">
@@ -46,6 +49,36 @@ export const Footer = () => {
               >
                 <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"></path>
               </svg>
+            </a>
+          </div>
+        </nav>
+        <nav className="m-[20px]">
+          <h6 className="footer-title">Developers Info</h6>
+          {/* <p className="text-[11px]">*Links will be added soon!</p> */}
+          <div className="grid grid-flow-col gap-4">
+            <a>
+              <Image
+                src="/github.svg"
+                height={26}
+                width={26}
+                alt="github"
+              ></Image>
+            </a>
+            <a>
+              <Image
+                src="/instagram.svg"
+                height={30}
+                width={30}
+                alt="github"
+              ></Image>
+            </a>
+            <a>
+              <Image
+                src="/linkedin.svg"
+                height={30}
+                width={30}
+                alt="github"
+              ></Image>
             </a>
           </div>
         </nav>

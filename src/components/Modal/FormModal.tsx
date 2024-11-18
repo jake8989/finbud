@@ -1,4 +1,4 @@
-import { useState, useEffect, ChangeEvent } from "react";
+import React, { useState, useEffect, ChangeEvent } from "react";
 import { useFormState } from "react-dom";
 import { useToast } from "@/context/customToastContext";
 import { gql, useMutation } from "@apollo/client";
@@ -7,12 +7,14 @@ import {
   MutationRegisterUserArgs,
   MutationLoginUserArgs,
 } from "@/__generated__/graphql";
-
+import { GENERATE_AND_SEND_OTP } from "@/lib/mutations/OTPMutations";
 import { REGISTER_USER } from "@/lib/mutations/registerUser";
 import { LOGIN_USER } from "@/lib/mutations/loginUser";
 import { useUser } from "@/context/userContext";
 import { User } from "@/utils/types";
 import Cookie from "js-cookie";
+import { OTP } from "./OTP";
+import { error } from "console";
 interface userFormsProps {
   userFormType: string;
   handleClose: () => void;
@@ -32,6 +34,9 @@ export const FormModal: React.FC<userFormsProps> = ({
 }) => {
   const { toast } = useToast();
   const { user, loginUserMethod, logoutUserMethod, userLoading } = useUser();
+  const [shouldOpenOTP, setShouldOpenOTP] = React.useState(
+    !Cookie.get("OTP_OPEN") || Cookie.get("OTP_OPEN") == "false" ? false : true
+  );
   const [
     registerUser,
     { data: registerData, loading: registerLoading, error: registerError },
@@ -40,7 +45,17 @@ export const FormModal: React.FC<userFormsProps> = ({
     loginUser,
     { data: loginData, loading: loginLoading, error: loginError },
   ] = useMutation(LOGIN_USER);
+  const [
+    generateAndSendOTP,
+    { data: OTPData, loading: OTPGenerationLoading, error: OTPGenerationError },
+  ] = useMutation(GENERATE_AND_SEND_OTP);
 
+  const handleOTPClose = () => {
+    setShouldOpenOTP(false);
+    if (Cookie.get("OTP_OPEN") == "true") {
+      Cookie.remove("OTP_OPEN");
+    }
+  };
   const [formInputs, setFormInputs] = useState<UserFormInput>({
     username: "",
     email: "",
@@ -101,44 +116,69 @@ export const FormModal: React.FC<userFormsProps> = ({
             password: formInputs.password,
           },
         };
+
         const { data } = await registerUser({
           variables: userRegisterData,
         });
-
+        if (registerError) {
+          toast("Server Error", "error", 3000);
+          return;
+        }
         if (!data.registerUser.success) {
+          console.log("err");
           toast(data.registerUser.message, "error", 3000);
+          return;
         }
         if (data.registerUser.success) {
-          const newUser: User = {
-            user: {
-              username: data?.registerUser?.user?.username,
-              email: data?.registerUser?.user?.email,
+          //send otp to the email
+          Cookie.set("OTP_OPEN", "true");
+          /////////////////////////
+          console.log("SEnding email");
+
+          await generateAndSendOTP({
+            variables: {
+              otp: {
+                email: formInputs.email,
+              },
             },
-          };
-          loginUserMethod(newUser);
-          Cookie.set("token", data?.registerUser?.token, { expires: 1 });
+          });
+
+          if (OTPGenerationError) {
+            toast("There is a problem in our Email server", "error", 3000);
+            return;
+          }
+          // console.log(OTPData);
+
+          if (!OTPData.generateAndSendOTP.success) {
+            toast("Error Sending Mail by Server!", "error", 3000);
+            Cookie.remove("OTP_OPEN");
+            return;
+          }
+
           toast(data.registerUser.message, "success", 3000);
-          handleModalClose();
+          if (OTPData.generateAndSendOTP.success) {
+            handleModalClose();
+            setShouldOpenOTP(true);
+          }
         }
       } catch (error) {
         console.log(error);
+        return;
       }
     } else if (userFormType === "login") {
       try {
-        const userLoginData: MutationLoginUserArgs = {
-          user: {
-            username: formInputs.username,
-            password: formInputs.password,
-          },
-        };
         const { data } = await loginUser({
           variables: {
             user: {
-              username: formInputs.username,
+              usernameoremail: formInputs.username,
               password: formInputs.password,
             },
           },
         });
+        if (loginError) {
+          toast("Server error", "error", 3000);
+          return;
+        }
         console.log(data);
         if (data.loginUser.success) {
           const newUser: User = {
@@ -158,6 +198,7 @@ export const FormModal: React.FC<userFormsProps> = ({
       } catch (error) {
         console.log(error);
         toast(error, "error", 2000);
+        return;
       }
     }
   };
@@ -211,7 +252,9 @@ export const FormModal: React.FC<userFormsProps> = ({
                   type="text"
                   className="grow"
                   name="username"
-                  placeholder="Username"
+                  placeholder={
+                    userFormType === "login" ? "Username or Email" : "Username"
+                  }
                   onChange={handleInputChanges}
                 />
               </label>
@@ -264,7 +307,9 @@ export const FormModal: React.FC<userFormsProps> = ({
               <button
                 className="btn btn-primary"
                 onClick={handleSubmitForm}
-                disabled={loginLoading || registerLoading}
+                disabled={
+                  loginLoading || registerLoading || OTPGenerationLoading
+                }
               >
                 {(registerLoading || loginLoading) && "Loading..."}
                 {!registerLoading && !loginLoading && isLogin && "Login"}
@@ -273,7 +318,9 @@ export const FormModal: React.FC<userFormsProps> = ({
               <button
                 className="btn ml-2"
                 onClick={handleModalClose}
-                disabled={loginLoading || registerLoading}
+                disabled={
+                  loginLoading || registerLoading || OTPGenerationLoading
+                }
               >
                 Close
               </button>
@@ -283,6 +330,7 @@ export const FormModal: React.FC<userFormsProps> = ({
       ) : (
         ""
       )}
+      <OTP shouldOpenOTP={shouldOpenOTP} handleOTPClose={handleOTPClose}></OTP>
     </>
   );
 };

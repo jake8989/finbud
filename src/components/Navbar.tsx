@@ -119,7 +119,7 @@ const Navbar = () => {
               {" "}
               <div className="avatar placeholder">
                 <div className="bg-neutral text-neutral-content w-8 rounded-full">
-                  <span>{user.user.username.slice(0, 2).toUpperCase()}</span>
+                  <span>{user?.user?.username?.slice(0, 2).toUpperCase()}</span>
                 </div>
               </div>
             </div>
@@ -128,7 +128,8 @@ const Navbar = () => {
               tabIndex={0}
               className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow"
             >
-              <li>
+              <h1 className="p-[10px]">Hello, {user.user.username}</h1>
+              <li className="mt-[10px]">
                 <button className="btn btn-warning" onClick={handleLogout}>
                   Logout
                 </button>

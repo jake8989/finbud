@@ -3,6 +3,7 @@ import { useUser } from "@/context/userContext";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { useToast } from "@/context/customToastContext";
+import { Loading } from "@/components/Loading/Loading";
 const TrackExpense = () => {
   const { user, userLoading } = useUser();
   const router = useRouter();
@@ -19,6 +20,9 @@ const TrackExpense = () => {
       }
     }
   }, [user, router, userLoading]);
+  if (userLoading) {
+    return <Loading></Loading>;
+  }
   return (
     <>
       <TrackerDrawer></TrackerDrawer>

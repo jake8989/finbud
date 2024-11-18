@@ -34,6 +34,7 @@ export const UserContextProvider: React.FC<{ children: ReactNode }> = ({
   }, []);
   const loginUserMethod = (user: User) => {
     setUser(user);
+    console.log(user);
     localStorage.setItem("user", JSON.stringify(user));
   };
   const logoutUserMethod = () => {

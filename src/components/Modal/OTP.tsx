@@ -1,5 +1,12 @@
 import Image from "next/image";
 import React from "react";
+import { useUser } from "@/context/userContext";
+import { Loading } from "../Loading/Loading";
+import { useMutation } from "@apollo/client";
+import { VERIFY_OTP } from "@/lib/mutations/OTPMutations";
+import { useToast } from "@/context/customToastContext";
+import Cookie from "js-cookie";
+import { User } from "@/utils/types";
 interface OTPPros {
   shouldOpenOTP: boolean;
   handleOTPClose: () => void;
@@ -7,6 +14,75 @@ interface OTPPros {
 
 export const OTP: React.FC<OTPPros> = ({ shouldOpenOTP, handleOTPClose }) => {
   if (!shouldOpenOTP) return null;
+  const { toast } = useToast();
+  const { user, loginUserMethod, logoutUserMethod, userLoading } = useUser();
+  //   const { user, userLoading } = useUser();
+  const [otp, setOtp] = React.useState<string>("");
+  const [verifyOTP, { data, loading, error }] = useMutation(VERIFY_OTP);
+  const handleChange = (e: any) => {
+    e.preventDefault();
+    setOtp(e.target.value);
+  };
+  const handleVerifyOTP = async () => {
+    try {
+      const trimmedOTP = otp.trim();
+      console.log("Validating OTP:", trimmedOTP);
+
+      if (trimmedOTP === "" || trimmedOTP.length !== 6) {
+        toast("Enter Valid OTP!", "error", 2000);
+        return false;
+      }
+
+      const userEmail = Cookie.get("user_email");
+      if (!userEmail) {
+        toast("Email not found. Please try again.", "error", 2000);
+        return false;
+      }
+
+      const { data: verificationData } = await verifyOTP({
+        variables: {
+          otp: {
+            otp: trimmedOTP,
+            email: userEmail,
+          },
+        },
+      });
+
+      if (!verificationData?.verifyOTP) {
+        toast("Server Error", "error", 2000);
+        return false;
+      }
+
+      if (!verificationData.verifyOTP.success) {
+        toast(verificationData.verifyOTP.message, "error", 3000);
+        return false;
+      }
+
+      console.log(verificationData);
+      const newUser: User = {
+        user: {
+          username: verificationData.verifyOTP.user.username,
+          email: verificationData.verifyOTP.user.email,
+        },
+      };
+
+      // Step 6: Login user and show success message
+      loginUserMethod(newUser);
+      toast(verificationData.verifyOTP.message, "success", 3000);
+      handleOTPClose();
+      // Clean up OTP-related cookies
+      Cookie.remove("OTP_OPEN");
+
+      return true;
+    } catch (error) {
+      console.error("OTP verification error:", error);
+      toast("An unexpected error occurred", "error", 3000);
+      return false;
+    }
+  };
+  if (userLoading) {
+    return <Loading></Loading>;
+  }
   return (
     <>
       <dialog
@@ -37,8 +113,10 @@ export const OTP: React.FC<OTPPros> = ({ shouldOpenOTP, handleOTPClose }) => {
                 type="number"
                 className="grow"
                 placeholder="Enter OTP"
-                name="goalDescription"
-                required
+                name="otp"
+                value={otp}
+                onChange={handleChange}
+                // required
                 // onChange={handleEditFormChange}
               />
             </label>
@@ -46,22 +124,22 @@ export const OTP: React.FC<OTPPros> = ({ shouldOpenOTP, handleOTPClose }) => {
             <div className="mt-2"></div>
             <button
               className="btn btn-primary"
-              //   onClick={handleEditThisGoal}
-              //   disabled={loading}
+              onClick={handleVerifyOTP}
+              disabled={loading}
             >
-              {true ? "Loading..." : "Meowww"}
+              {loading ? "Loading..." : "Meowww"}
             </button>
             <button
               className="btn btn-warning ml-2"
               //   onClick={handleBothModals}
-              //   disabled={loading}
+              disabled={loading}
             >
-              Delete This Goal
+              Send Again
             </button>
             <button
               className="btn ml-2"
               onClick={() => handleOTPClose()}
-              //   disabled={loading}
+              disabled={loading}
             >
               Close
             </button>

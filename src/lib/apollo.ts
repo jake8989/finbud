@@ -7,7 +7,7 @@ const httpLink = createHttpLink({
   uri: process.env.NEXT_PUBLIC_BACKEND,
 });
 const cache = new InMemoryCache();
-
+// const { toast } = useToast();
 if (typeof window !== "undefined") {
   import("apollo3-cache-persist").then(({ persistCache }) => {
     // localStorage.removeItem("apollo-cache-persist");
@@ -35,6 +35,7 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
         `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
       );
     });
+    return;
   }
 
   if (networkError) {
@@ -43,11 +44,12 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
     alert(
       "Backend is offline or network error occurred. Please try again later."
     );
+    return;
   }
 });
 
 export const client = new ApolloClient({
-  link: errorLink.concat(authLink.concat(httpLink)),
+  link: authLink.concat(httpLink),
   cache: cache,
 });
 

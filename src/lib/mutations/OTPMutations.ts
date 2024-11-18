@@ -8,3 +8,16 @@ export const GENERATE_AND_SEND_OTP = gql`
     }
   }
 `;
+
+export const VERIFY_OTP = gql`
+  mutation VerifyOTP($otp: VerifyOTPType!) {
+    verifyOTP(otp: $otp) {
+      success
+      message
+      user {
+        username
+        email
+      }
+    }
+  }
+`;

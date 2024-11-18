@@ -15,6 +15,7 @@ import { User } from "@/utils/types";
 import Cookie from "js-cookie";
 import { OTP } from "./OTP";
 import { error } from "console";
+
 interface userFormsProps {
   userFormType: string;
   handleClose: () => void;
@@ -108,7 +109,86 @@ export const FormModal: React.FC<userFormsProps> = ({
     //create new user in local
 
     if (userFormType === "register") {
+      // try {
+      //   const userRegisterData: MutationRegisterUserArgs = {
+      //     user: {
+      //       username: formInputs.username,
+      //       email: formInputs.email,
+      //       password: formInputs.password,
+      //     },
+      //   };
+
+      //   const { data } = await registerUser({
+      //     variables: userRegisterData,
+      //   });
+      //   if (registerError) {
+      //     toast("Server Error", "error", 3000);
+      //     return;
+      //   }
+      //   if (!data.registerUser) {
+      //     console.log("err");
+      //     toast("Server Error!", "error", 3000);
+      //     return;
+      //   }
+      //   if (!data.registerUser.success) {
+      //     console.log("err");
+      //     toast(data.registerUser.message, "error", 3000);
+      //     return;
+      //   }
+      //   if (data.registerUser.success) {
+      //     const newUser: User = {
+      //       user: {
+      //         username: data?.registerUser?.user?.username,
+      //         email: data?.registerUser?.user?.email,
+      //       },
+      //     };
+
+      //     // loginUserMethod(newUser);
+      //     Cookie.set("user_email", data.registerUser.user.email);
+      //     //send otp to the email
+      //     Cookie.set("OTP_OPEN", "true");
+      //     /////////////////////////
+      //     console.log("SEnding email");
+
+      //     await generateAndSendOTP({
+      //       variables: {
+      //         otp: {
+      //           email: formInputs.email,
+      //         },
+      //       },
+      //     });
+
+      //     if (OTPGenerationError) {
+      //       toast("There is a problem in our Email server", "error", 3000);
+      //       return;
+      //     }
+      //     if (!OTPData || !OTPData.generateAndSendOTP) {
+      //       toast("Error in OTP response from server", "error", 3000);
+      //       Cookie.remove("OTP_OPEN");
+      //       return;
+      //     }
+      //     // console.log(OTPData);
+
+      //     if (!OTPData.generateAndSendOTP.success) {
+      //       toast("Error Sending Mail by Server!", "error", 3000);
+      //       Cookie.remove("OTP_OPEN");
+      //       Cookie.remove("OTP_OPEN");
+      //       return;
+      //     }
+
+      //     toast(data.registerUser.message, "success", 3000);
+      //     if (OTPData.generateAndSendOTP.success) {
+      //       Cookie.set("OTP_OPEN", "true");
+      //       handleModalClose();
+      //       setShouldOpenOTP(true);
+      //     }
+      //   }
+      // } catch (error) {
+      //   console.log(error);
+      //   return;
+      // }
       try {
+        // Step 1: Register User
         const userRegisterData: MutationRegisterUserArgs = {
           user: {
             username: formInputs.username,
@@ -117,53 +197,64 @@ export const FormModal: React.FC<userFormsProps> = ({
           },
         };
 
-        const { data } = await registerUser({
+        const { data: registrationData } = await registerUser({
           variables: userRegisterData,
         });
-        if (registerError) {
-          toast("Server Error", "error", 3000);
-          return;
-        }
-        if (!data.registerUser.success) {
-          console.log("err");
-          toast(data.registerUser.message, "error", 3000);
-          return;
-        }
-        if (data.registerUser.success) {
-          //send otp to the email
-          Cookie.set("OTP_OPEN", "true");
-          /////////////////////////
-          console.log("SEnding email");
 
-          await generateAndSendOTP({
-            variables: {
-              otp: {
-                email: formInputs.email,
-              },
+        // Check registration response
+        if (!registrationData?.registerUser) {
+          toast("Server Error!", "error", 3000);
+          return false;
+        }
+
+        if (!registrationData.registerUser.success) {
+          toast(registrationData.registerUser.message, "error", 3000);
+          return false;
+        }
+
+        // Step 2: Set user data after successful registration
+        const newUser: User = {
+          user: {
+            username: registrationData.registerUser.user.username,
+            email: registrationData.registerUser.user.email,
+          },
+        };
+
+        Cookie.set("user_email", registrationData.registerUser.user.email);
+        Cookie.set("OTP_OPEN", "true");
+
+        // Step 3: Generate and send OTP
+        const { data: otpData } = await generateAndSendOTP({
+          variables: {
+            otp: {
+              email: formInputs.email,
             },
-          });
+          },
+        });
 
-          if (OTPGenerationError) {
-            toast("There is a problem in our Email server", "error", 3000);
-            return;
-          }
-          // console.log(OTPData);
-
-          if (!OTPData.generateAndSendOTP.success) {
-            toast("Error Sending Mail by Server!", "error", 3000);
-            Cookie.remove("OTP_OPEN");
-            return;
-          }
-
-          toast(data.registerUser.message, "success", 3000);
-          if (OTPData.generateAndSendOTP.success) {
-            handleModalClose();
-            setShouldOpenOTP(true);
-          }
+        // Check OTP generation response
+        if (!otpData?.generateAndSendOTP) {
+          toast("Error in OTP response from server", "error", 3000);
+          Cookie.remove("OTP_OPEN");
+          return false;
         }
+
+        if (!otpData.generateAndSendOTP.success) {
+          toast("Error Sending Mail by Server!", "error", 3000);
+          Cookie.remove("OTP_OPEN");
+          return false;
+        }
+
+        // Step 4: Handle successful registration and OTP generation
+        toast(registrationData.registerUser.message, "success", 3000);
+        handleModalClose();
+        setShouldOpenOTP(true);
+        return true;
       } catch (error) {
-        console.log(error);
-        return;
+        console.error("Registration error:", error);
+        toast("An unexpected error occurred", "error", 3000);
+        Cookie.remove("OTP_OPEN");
+        return false;
       }
     } else if (userFormType === "login") {
       try {
@@ -177,7 +268,7 @@ export const FormModal: React.FC<userFormsProps> = ({
         });
         if (loginError) {
           toast("Server error", "error", 3000);
-          // return;
+          return;
         }
         console.log(data);
         if (data.loginUser.success) {

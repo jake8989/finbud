@@ -40,6 +40,7 @@ const Navbar = () => {
     await logoutUserMethod();
     toast("Logged Out Successfully!", "success", 3000);
   };
+
   return (
     <div className="navbar bg-base-100">
       <div className="flex-1">

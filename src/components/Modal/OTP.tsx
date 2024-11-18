@@ -7,6 +7,7 @@ import { VERIFY_OTP } from "@/lib/mutations/OTPMutations";
 import { useToast } from "@/context/customToastContext";
 import Cookie from "js-cookie";
 import { User } from "@/utils/types";
+import { GENERATE_AND_SEND_OTP } from "@/lib/mutations/OTPMutations";
 interface OTPPros {
   shouldOpenOTP: boolean;
   handleOTPClose: () => void;
@@ -19,6 +20,10 @@ export const OTP: React.FC<OTPPros> = ({ shouldOpenOTP, handleOTPClose }) => {
   //   const { user, userLoading } = useUser();
   const [otp, setOtp] = React.useState<string>("");
   const [verifyOTP, { data, loading, error }] = useMutation(VERIFY_OTP);
+  const [
+    generateAndSendOTP,
+    { loading: GENERATEOTPLOADING, error: GENERATEOTPERROR },
+  ] = useMutation(GENERATE_AND_SEND_OTP);
   const handleChange = (e: any) => {
     e.preventDefault();
     setOtp(e.target.value);
@@ -80,6 +85,28 @@ export const OTP: React.FC<OTPPros> = ({ shouldOpenOTP, handleOTPClose }) => {
       return false;
     }
   };
+  const handleSendAgain = async () => {
+    const { data: OTPGenerationAndSendData } = await generateAndSendOTP({
+      variables: {
+        otp: {
+          email: Cookie.get("user_email"),
+        },
+      },
+    });
+    console.log(OTPGenerationAndSendData);
+    if (!OTPGenerationAndSendData?.generateAndSendOTP) {
+      toast("Server Error", "error", 2000);
+      return false;
+    }
+
+    if (!OTPGenerationAndSendData.generateAndSendOTP.success) {
+      toast(OTPGenerationAndSendData.generateAndSendOTP.message, "error", 3000);
+      return false;
+    }
+    if (OTPGenerationAndSendData.generateAndSendOTP.success) {
+      toast("OTP send Succesfully to your Email Address", "success", 2000);
+    }
+  };
   if (userLoading) {
     return <Loading></Loading>;
   }
@@ -125,21 +152,21 @@ export const OTP: React.FC<OTPPros> = ({ shouldOpenOTP, handleOTPClose }) => {
             <button
               className="btn btn-primary"
               onClick={handleVerifyOTP}
-              disabled={loading}
+              disabled={loading || GENERATEOTPLOADING}
             >
               {loading ? "Loading..." : "Meowww"}
             </button>
             <button
               className="btn btn-warning ml-2"
-              //   onClick={handleBothModals}
-              disabled={loading}
+              onClick={handleSendAgain}
+              disabled={loading || GENERATEOTPLOADING}
             >
-              Send Again
+              {GENERATEOTPLOADING ? "Loading..." : "Meowww"}
             </button>
             <button
               className="btn ml-2"
               onClick={() => handleOTPClose()}
-              disabled={loading}
+              disabled={loading || GENERATEOTPLOADING}
             >
               Close
             </button>

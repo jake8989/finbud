@@ -177,7 +177,7 @@ export const FormModal: React.FC<userFormsProps> = ({
         });
         if (loginError) {
           toast("Server error", "error", 3000);
-          return;
+          // return;
         }
         console.log(data);
         if (data.loginUser.success) {

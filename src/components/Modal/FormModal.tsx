@@ -207,6 +207,9 @@ export const FormModal: React.FC<userFormsProps> = ({
     // console.log(event.target.value);
     setFormInputs({ ...formInputs, [event.target.name]: event.target.value });
   };
+  if (loginError || registerError) {
+    return <h1>Server is down right now!</h1>;
+  }
   return (
     <>
       {userFormType != undefined ? (

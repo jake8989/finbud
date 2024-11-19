@@ -33,7 +33,7 @@ export const HomePage: React.FC = () => {
               after saving <strong>-Warren Buffett</strong>
             </p>
             <button
-              className="btn btn-secondary"
+              className="btn btn-secondary min-w-[80%]"
               onClick={() => router.push("/track-expense")}
             >
               Track Your Expenses
@@ -81,7 +81,7 @@ export const HomePage: React.FC = () => {
             Get an in-depth look at your monthly expenses and categorize them
             for smarter budgeting
           </p>
-          <button
+          {/* <button
             className="btn btn-secondary flex items-center"
             onClick={() => router.push("/track-expense")}
           >
@@ -93,7 +93,7 @@ export const HomePage: React.FC = () => {
               alt="arr"
               className="ml-2" // Adds spacing between text and arrow
             />
-          </button>
+          </button> */}
         </div>
       </div>
       <div>
@@ -107,7 +107,7 @@ export const HomePage: React.FC = () => {
               Stay organized by building your own expense categories and track
               spending in a way that works for you.
             </p>
-            <button
+            {/* <button
               className="btn btn-secondary"
               onClick={() => router.push("/track-expense")}
             >
@@ -118,7 +118,7 @@ export const HomePage: React.FC = () => {
                 width={22}
                 alt="arr"
               ></Image>
-            </button>
+            </button> */}
           </div>
 
           {/* Right Section: Image */}
@@ -159,7 +159,7 @@ export const HomePage: React.FC = () => {
             Generate, Review, and Refine with Detailed Systematic Reports at
             Month-End.
           </p>
-          <button
+          {/* <button
             className="btn btn-secondary flex items-center"
             onClick={() => router.push("/track-expense")}
           >
@@ -171,7 +171,7 @@ export const HomePage: React.FC = () => {
               alt="arr"
               className="ml-2" // Adds spacing between text and arrow
             />
-          </button>
+          </button> */}
         </div>
       </div>
 
@@ -186,7 +186,7 @@ export const HomePage: React.FC = () => {
               Set, Track, and Conquer up to 6 Custom Goals for a Balanced and
               Purposeful Journey.
             </p>
-            <button
+            {/* <button
               className="btn btn-secondary"
               onClick={() => router.push("/track-expense")}
             >
@@ -197,7 +197,7 @@ export const HomePage: React.FC = () => {
                 width={22}
                 alt="arr"
               ></Image>
-            </button>
+            </button> */}
           </div>
 
           {/* Right Section: Image */}

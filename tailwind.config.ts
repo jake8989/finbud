@@ -11,6 +11,7 @@ module.exports = {
       "dim",
       "dark",
       "cupcake",
+
       {
         light: {
           primary: "#c79b53",

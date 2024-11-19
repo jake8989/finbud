@@ -130,13 +130,89 @@ export const HomePage: React.FC = () => {
                   : "/category-light.svg"
               }
               alt="Landing"
-              height={400}
-              width={400}
+              height={600}
+              width={600}
             />
           </div>
         </div>
       </div>
 
+      <div className="flex justify-center items-center flex-wrap flex-col md:flex-row mt-[40px]  min-h-[70vh]">
+        {/* Left Section: Image */}
+        <div className="flex justify-center items-center md:w-1/2">
+          <Image
+            src={
+              currentTheme !== "light"
+                ? "/report-dark.svg"
+                : "/report-light.svg"
+            }
+            alt="Landing"
+            height={600}
+            width={600}
+          />
+        </div>
+
+        {/* Right Section: Content */}
+        <div className="flex flex-col justify-center items-center md:w-1/2 text-center order-2 md:order-1  min-h-[70vh]">
+          <h1 className="text-5xl p-6">Streamlined Monthly Insights</h1>
+          <p className="text-lg mb-6 mt-2">
+            Generate, Review, and Refine with Detailed Systematic Reports at
+            Month-End.
+          </p>
+          <button
+            className="btn btn-secondary flex items-center"
+            onClick={() => router.push("/track-expense")}
+          >
+            Track Your Expenses
+            <Image
+              src="/right-arr.svg"
+              height={22}
+              width={22}
+              alt="arr"
+              className="ml-2" // Adds spacing between text and arrow
+            />
+          </button>
+        </div>
+      </div>
+
+      <div>
+        <div className="flex flex-col justify-center md:flex-row  min-h-[70vh] ">
+          {/* Left Section: Text */}
+          <div className="flex flex-col justify-center items-center md:w-1/2">
+            <h1 className="text-5xl text-center p-6">
+              Achieve More with Focused Goals
+            </h1>
+            <p className="text-lg text-center mb-6 mt-2">
+              Set, Track, and Conquer up to 6 Custom Goals for a Balanced and
+              Purposeful Journey.
+            </p>
+            <button
+              className="btn btn-secondary"
+              onClick={() => router.push("/track-expense")}
+            >
+              Track Your Expenses
+              <Image
+                src="/right-arr.svg"
+                height={22}
+                width={22}
+                alt="arr"
+              ></Image>
+            </button>
+          </div>
+
+          {/* Right Section: Image */}
+          <div className="flex justify-center items-center md:w-1/2 ">
+            <Image
+              src={
+                currentTheme !== "light" ? "/goal-dark.svg" : "/goal-light.svg"
+              }
+              alt="Landing"
+              height={500}
+              width={500}
+            />
+          </div>
+        </div>
+      </div>
       <Footer></Footer>
       {/* <ContactForm></ContactForm> */}
     </>

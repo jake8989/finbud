@@ -5,8 +5,8 @@ import { useRouter } from "next/router";
 export const Footer = () => {
   const router = useRouter();
   return (
-    <footer className="footer bg-base-200 text-base-content p-10 flex flex-col md:flex-row md:items-start md:justify-between">
-      <aside className="md:w-1/2">
+    <footer className="footer bg-base-200 text-base-content flex flex-col md:flex-row md:items-start md:justify-between">
+      <aside className="md:w-1/2 m-10">
         <p>
           <a className="btn btn-ghost text-2xl flex items-center">
             <Image src="logo.svg" height={40} width={40} alt="322" />

@@ -161,7 +161,7 @@ export const OTP: React.FC<OTPPros> = ({ shouldOpenOTP, handleOTPClose }) => {
               onClick={handleSendAgain}
               disabled={loading || GENERATEOTPLOADING}
             >
-              {GENERATEOTPLOADING ? "Loading..." : "Meowww"}
+              {GENERATEOTPLOADING ? "Loading..." : "Send Again"}
             </button>
             <button
               className="btn ml-2"

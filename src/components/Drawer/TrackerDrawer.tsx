@@ -9,6 +9,7 @@ import ExpenseCategories from "../Expenses/ExpenseCategories";
 import { useRouter } from "next/router";
 import { useToast } from "@/context/customToastContext";
 import AddIncome from "../Income/AddIncome";
+import { MontlyReports } from "../Reports/Report";
 const TrackerDrawer = () => {
   const [whichComponent, setWhichComponent] = useState("Dashboard");
   const [loading, setLoading] = useState(true);
@@ -50,6 +51,9 @@ const TrackerDrawer = () => {
       case "ExpenseCategories": {
         return <ExpenseCategories />;
       }
+      case "MonthlyReports": {
+        return <MontlyReports />;
+      }
       default:
         return <Dashboard />;
     }
@@ -76,6 +80,10 @@ const TrackerDrawer = () => {
       setLoading(true);
       Cookies.set("expense-panel", "ExpenseCategories", { expires: 7 });
       setWhichComponent("ExpenseCategories");
+    } else if (panel === "MonthlyReports") {
+      setLoading(true);
+      Cookies.set("expense-panel", "MonthlyReports", { expires: 7 });
+      setWhichComponent("MonthlyReports");
     }
     setTimeout(() => setLoading(false), 500);
   };
@@ -142,6 +150,12 @@ const TrackerDrawer = () => {
               onClick={() => handlePanelChange("ExpenseCategories")}
             >
               Expense Categories
+            </button>
+            <button
+              className="btn btn-ghost"
+              onClick={() => handlePanelChange("MonthlyReports")}
+            >
+              Monthly Reports
             </button>
           </li>
         </ul>

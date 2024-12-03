@@ -32,7 +32,7 @@ export const isGoalDataOkay = (goalData: GoalType) => {
   if (sdyear > edyear) {
     return "ErrorDate";
   }
-  if (sdyear < edyear && sdmonth > edmonth) {
+  if (sdyear === edyear && sdmonth > edmonth) {
     return "ErrorDate";
   }
   if (sdmonth === edmonth && sdday > edday) {

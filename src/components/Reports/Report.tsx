@@ -1,3 +1,3 @@
 export const MontlyReports = () => {
-  return <h1>Monthly Reports</h1>;
+  return <h1>Coming Soon....</h1>;
 };

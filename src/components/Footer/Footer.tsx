@@ -13,7 +13,7 @@ export const Footer = () => {
             <span className="ml-2">FinBud</span>
           </a>
         </p>
-        <nav className="m-[20px]">
+        {/* <nav className="m-[20px]">
           <h6 className="footer-title">Social</h6>
           <p className="text-[11px]">*Links will be added soon!</p>
           <div className="grid grid-flow-col gap-4">
@@ -51,34 +51,52 @@ export const Footer = () => {
               </svg>
             </a>
           </div>
-        </nav>
+        </nav> */}
         <nav className="m-[20px]">
           <h6 className="footer-title">Developers Info</h6>
           {/* <p className="text-[11px]">*Links will be added soon!</p> */}
           <div className="grid grid-flow-col gap-4">
             <a>
-              <Image
-                src="/github.svg"
-                height={26}
-                width={26}
-                alt="github"
-              ></Image>
+              <button
+                onClick={() => router.push("https://github.com/jake8989")}
+              >
+                <Image
+                  src="/github.svg"
+                  height={26}
+                  width={26}
+                  alt="github"
+                ></Image>
+              </button>
             </a>
             <a>
-              <Image
-                src="/instagram.svg"
-                height={30}
-                width={30}
-                alt="github"
-              ></Image>
+              <button
+                onClick={() =>
+                  router.push("https://www.instagram.com/dhakad.jayant1/")
+                }
+              >
+                <Image
+                  src="/instagram.svg"
+                  height={30}
+                  width={30}
+                  alt="github"
+                ></Image>
+              </button>
             </a>
             <a>
-              <Image
-                src="/linkedin.svg"
-                height={30}
-                width={30}
-                alt="github"
-              ></Image>
+              <button
+                onClick={() =>
+                  router.push(
+                    "https://www.linkedin.com/in/jayant-kumar-8a5517233/"
+                  )
+                }
+              >
+                <Image
+                  src="/linkedin.svg"
+                  height={30}
+                  width={30}
+                  alt="github"
+                ></Image>
+              </button>
             </a>
           </div>
         </nav>

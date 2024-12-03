@@ -29,7 +29,10 @@ export const isGoalDataOkay = (goalData: GoalType) => {
   const [edyear, edmonth, edday] = goalEndDate.split("-").map(Number);
 
   //check for start date and end date of the goal
-  if (sdyear > edyear || sdmonth > edmonth) {
+  if (sdyear > edyear) {
+    return "ErrorDate";
+  }
+  if (sdyear < edyear && sdmonth > edmonth) {
     return "ErrorDate";
   }
   if (sdmonth === edmonth && sdday > edday) {

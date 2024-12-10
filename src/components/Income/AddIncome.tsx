@@ -121,6 +121,7 @@ const AddIncome = () => {
           <p className="text-[12px]">
             *Be carefull adding incomes are irreversable
           </p>
+          <p className="text-[12px]">*Please add integer part of the income</p>
           <label className="input input-bordered flex items-center gap-2 mt-1.5">
             <Image src={"/rupees.svg"} height={18} width={18} alt="no"></Image>
             <input

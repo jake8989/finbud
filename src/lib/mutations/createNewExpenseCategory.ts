@@ -8,3 +8,12 @@ export const CREATE_EXPENSE_CATEGORY = gql`
     }
   }
 `;
+
+export const DELETE_EXPENSE_CATEGORY = gql`
+  mutation deleteExistExpenseCategory($expenseCategory: ExpenseCategoryInput!) {
+    deleteExistExpenseCategory(expenseCategory: $expenseCategory) {
+      success
+      message
+    }
+  }
+`;

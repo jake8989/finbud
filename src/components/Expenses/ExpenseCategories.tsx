@@ -1,10 +1,15 @@
-import { CREATE_EXPENSE_CATEGORY } from "@/lib/mutations/createNewExpenseCategory";
+import {
+  CREATE_EXPENSE_CATEGORY,
+  DELETE_EXPENSE_CATEGORY,
+} from "@/lib/mutations/createNewExpenseCategory";
 import { useMutation } from "@apollo/client";
 import { useUser } from "@/context/userContext";
 import React, { ChangeEvent } from "react";
 import { useToast } from "@/context/customToastContext";
 import { MutationCreateExpenseCategoryArgs } from "@/__generated__/graphql";
 import { FetchExpenseCategories } from "@/data/expenseCategories";
+import Image from "next/image";
+import { Loading } from "../Loading/Loading";
 interface NewExpenseCategory {
   expenseCategory: string;
 }
@@ -16,9 +21,24 @@ const ExpenseCategories = () => {
         refetch();
       },
     });
+
+  const [
+    deleteExistExpenseCategory,
+    {
+      data: DeleteExpenseCategoryResponse,
+      loading: DeleteExpenseCategoryLoading,
+      error: DeleteExpenseCategoryError,
+    },
+  ] = useMutation(DELETE_EXPENSE_CATEGORY, {
+    onCompleted: () => {
+      refetch();
+    },
+  });
   const { user } = useUser();
   const { toast } = useToast();
-  const { refetch } = FetchExpenseCategories(user?.user?.username);
+  const { refetch, expenseCategories } = FetchExpenseCategories(
+    user?.user?.username
+  );
   const [newExpenseCategory, setNewExpenseCategory] =
     React.useState<NewExpenseCategory>({ expenseCategory: "" });
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -52,14 +72,37 @@ const ExpenseCategories = () => {
       setNewExpenseCategory({ expenseCategory: "" });
     }
   };
-
+  const handleDeleteExpenseCategory = async (category: string) => {
+    console.log(category);
+    const { data } = await deleteExistExpenseCategory({
+      variables: {
+        expenseCategory: {
+          username: user?.user?.username,
+          expenseCategory: category,
+        },
+      },
+    });
+    if (data.deleteExistExpenseCategory.success) {
+      // console.log("Hii");
+      toast(data.deleteExistExpenseCategory.message, "success", 3000);
+      return;
+    }
+    if (!data.deleteExistExpenseCategory.success) {
+      // console.log("Hii");
+      toast(data.deleteExistExpenseCategory.message, "error", 3000);
+      return;
+    }
+  };
+  if (loading || DeleteExpenseCategoryLoading) {
+    return <Loading></Loading>;
+  }
   return (
     <>
-      <div className="flex justify-center">
+      <div className="flex justify-center flex-wrap">
         <div className="card bg-base-100 w-96 shadow-xl">
           <div className="card-body">
-            <h2 className="card-title">Add an Expense Category!</h2>
-            <p>Set Your Own Expense Categories</p>
+            <h2 className="card-title">Add an Expense/Income Category!</h2>
+            <p>Set Your Own Expense/Income Categories</p>
 
             <label className="input input-bordered flex items-center gap-2 mt-1.5">
               <svg
@@ -94,24 +137,32 @@ const ExpenseCategories = () => {
           </div>
         </div>
         {/* //expense categories card show */}
-        {/* <div
-          className="card bg-primary text-primary-content w-96 overflow-y-auto h-64"
+        <div
+          className="card bg-base-100 w-96 overflow-y-auto h-64"
           style={{ scrollbarWidth: "thin", scrollbarColor: "gray lightgray" }}
         >
           <div className="card-body ">
-            <h2 className="card-title">your Expense Categories!</h2>
-            <p>Groceries</p>
-            <p>Groceries</p>
-            <p>Groceries</p>
-            <p>Groceries</p>
-            <p>Groceries</p>
-            <p>Groceries</p>
-            <p>Groceries</p>
-            <p>Groceries</p>
-            <p>Groceries</p>
-            <p>Groceries</p>
+            <h2 className="card-title">your Expense/Income Categories!</h2>
+            {expenseCategories.map((category) => (
+              <p key={category.key}>
+                {category.category}
+                <button
+                  className="btn btn-ghost bg-error ml-[120px]"
+                  onClick={() => handleDeleteExpenseCategory(category.category)}
+                  disabled={DeleteExpenseCategoryLoading}
+                >
+                  {" "}
+                  <Image
+                    src="delete-icon.svg"
+                    height="23"
+                    width="23"
+                    alt="Delete Icon"
+                  ></Image>{" "}
+                </button>
+              </p>
+            ))}
           </div>
-        </div> */}
+        </div>
       </div>
     </>
   );

@@ -10,6 +10,7 @@ import { useRouter } from "next/router";
 import { useToast } from "@/context/customToastContext";
 import AddIncome from "../Income/AddIncome";
 import { MontlyReports } from "../Reports/Report";
+import { News } from "../News";
 const TrackerDrawer = () => {
   const [whichComponent, setWhichComponent] = useState("Dashboard");
   const [loading, setLoading] = useState(true);
@@ -54,6 +55,9 @@ const TrackerDrawer = () => {
       case "MonthlyReports": {
         return <MontlyReports />;
       }
+      case "News": {
+        return <News />;
+      }
       default:
         return <Dashboard />;
     }
@@ -84,6 +88,10 @@ const TrackerDrawer = () => {
       setLoading(true);
       Cookies.set("expense-panel", "MonthlyReports", { expires: 7 });
       setWhichComponent("MonthlyReports");
+      // } else if (panel === "News") {
+      //   setLoading(true);
+      //   Cookies.set("expense-panel", "News", { expires: 7 });
+      //   setWhichComponent("News");
     }
     setTimeout(() => setLoading(false), 500);
   };
@@ -157,6 +165,12 @@ const TrackerDrawer = () => {
             >
               Monthly Reports
             </button>
+            {/* <button
+              className="btn btn-ghost"
+              onClick={() => handlePanelChange("News")}
+            >
+              News
+            </button> */}
           </li>
         </ul>
       </div>
@@ -164,7 +178,7 @@ const TrackerDrawer = () => {
         htmlFor="my-drawer-2"
         className="btn btn-ghost drawer-button lg:hidden"
       >
-        <Image src="/hams.svg" height={20} width={20} alt="no"></Image>
+        <Image src="/hamburger.svg" height={20} width={20} alt="no"></Image>
       </label>
     </div>
   );

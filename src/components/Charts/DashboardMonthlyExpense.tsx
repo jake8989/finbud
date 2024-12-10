@@ -109,7 +109,12 @@ const DashboardMonthlyExpenseChart = () => {
   if (loading) {
     return <Loading></Loading>;
   }
-  return <canvas id="dashboardmonthlyexpensechart"></canvas>;
+  return (
+    // <div className="w-full max-w-lg mx-auto">
+    <canvas id="dashboardmonthlyexpensechart"></canvas>
+    // </div>
+  );
+  //  <canvas id="dashboardmonthlyexpensechart"></canvas>;
 };
 
 export default DashboardMonthlyExpenseChart;

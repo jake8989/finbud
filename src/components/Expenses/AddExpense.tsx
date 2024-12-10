@@ -132,6 +132,7 @@ const AddExp = () => {
           <p className="text-[12px]">
             *Be carefull adding expenses are irreversable
           </p>
+          <p className="text-[12px]">*Please add integer part of the expense</p>
           <label className="input input-bordered flex items-center gap-2 mt-1.5">
             <Image src={"/rupees.svg"} height={18} width={18} alt="no"></Image>
             <input

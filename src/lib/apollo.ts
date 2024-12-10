@@ -4,7 +4,7 @@ import { persistCache, LocalStorageWrapper } from "apollo3-cache-persist";
 import { onError } from "@apollo/client/link/error";
 import Cookies from "js-cookie";
 const httpLink = createHttpLink({
-  uri: process.env.NEXT_PUBLIC_BACKEND_DEV,
+  uri: process.env.NEXT_PUBLIC_BACKEND,
 });
 const cache = new InMemoryCache();
 // const { toast } = useToast();

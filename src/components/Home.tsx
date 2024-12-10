@@ -21,10 +21,10 @@ export const HomePage: React.FC = () => {
   return (
     <>
       <div>
-        <div className="flex flex-col justify-center md:flex-row  min-h-[70vh] ">
+        <div className="flex flex-col justify-center md:flex-row flex-col-reverse min-h-[70vh]">
           {/* Left Section: Text */}
           <div className="flex flex-col justify-center items-center md:w-1/2">
-            <h1 className="text-5xl text-center p-6">
+            <h1 className="text-3xl sm:text-5xl text-center sm:p-6 p-4">
               Track. Analyze. Optimize. Turn your financial data into actionable
               insights and elevate your financial health.
             </h1>
@@ -73,8 +73,8 @@ export const HomePage: React.FC = () => {
         </div>
 
         {/* Right Section: Content */}
-        <div className="flex flex-col justify-center items-center md:w-1/2 text-center order-2 md:order-1  min-h-[70vh]">
-          <h1 className="text-5xl p-6">
+        <div className="flex flex-col sm:justify-center items-center md:w-1/2 text-center order-2 md:order-1  sm:min-h-[70vh]">
+          <h1 className="text-3xl sm:text-5xl text-center sm:p-6 p-4">
             Monitor Your Spending, Category by Category, Month by Month.
           </h1>
           <p className="text-lg mb-6 mt-2">
@@ -97,10 +97,10 @@ export const HomePage: React.FC = () => {
         </div>
       </div>
       <div>
-        <div className="flex flex-col justify-center md:flex-row  min-h-[70vh] ">
+        <div className="flex flex-col sm:justify-center md:flex-row flex-col-reverse sm:min-h-[70vh]">
           {/* Left Section: Text */}
           <div className="flex flex-col justify-center items-center md:w-1/2">
-            <h1 className="text-5xl text-center p-6">
+            <h1 className="text-3xl sm:text-5xl text-center sm:p-6 p-4">
               Create, Track, and Optimize with Your Custom Expense Categories.
             </h1>
             <p className="text-lg text-center mb-6 mt-2">
@@ -137,7 +137,7 @@ export const HomePage: React.FC = () => {
         </div>
       </div>
 
-      <div className="flex justify-center items-center flex-wrap flex-col md:flex-row mt-[40px]  min-h-[70vh]">
+      <div className="flex justify-center items-center flex-wrap flex-col md:flex-row mt-[40px]  sm:min-h-[70vh]">
         {/* Left Section: Image */}
         <div className="flex justify-center items-center md:w-1/2">
           <Image
@@ -153,8 +153,10 @@ export const HomePage: React.FC = () => {
         </div>
 
         {/* Right Section: Content */}
-        <div className="flex flex-col justify-center items-center md:w-1/2 text-center order-2 md:order-1  min-h-[70vh]">
-          <h1 className="text-5xl p-6">Streamlined Monthly Insights</h1>
+        <div className="flex flex-col sm:justify-center items-center md:w-1/2 text-center order-2 md:order-1  sm:min-h-[70vh]">
+          <h1 className="text-3xl sm:text-5xl text-center sm:p-6 p-4">
+            Streamlined Monthly Insights
+          </h1>
           <p className="text-lg mb-6 mt-2">
             Generate, Review, and Refine with Detailed Systematic Reports at
             Month-End.
@@ -176,10 +178,10 @@ export const HomePage: React.FC = () => {
       </div>
 
       <div>
-        <div className="flex flex-col justify-center md:flex-row  min-h-[70vh] ">
+        <div className="flex flex-col justify-center md:flex-row flex-col-reverse sm:min-h-[70vh]">
           {/* Left Section: Text */}
-          <div className="flex flex-col justify-center items-center md:w-1/2">
-            <h1 className="text-5xl text-center p-6">
+          <div className="flex flex-col sm:justify-center items-center md:w-1/2">
+            <h1 className="text-3xl sm:text-5xl text-center sm:p-6 p-4">
               Achieve More with Focused Goals
             </h1>
             <p className="text-lg text-center mb-6 mt-2">

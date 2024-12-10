@@ -44,8 +44,17 @@ const Navbar = () => {
   return (
     <div className="navbar bg-base-100">
       <div className="flex-1">
-        <a className="btn btn-ghost text-2xl" onClick={() => router.push("/")}>
-          <Image src="logo.svg" height={40} width={40} alt="322"></Image>
+        <a
+          className="btn btn-ghost text-xl sm:text-2xl"
+          onClick={() => router.push("/")}
+        >
+          <Image
+            src="logo.svg"
+            height={30}
+            width={30}
+            className="sm:w-[40px] sm:h-[40px]"
+            alt="322"
+          ></Image>
           FinBud
         </a>
       </div>

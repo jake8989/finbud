@@ -2,6 +2,7 @@ import React, { ReactNode } from "react";
 import { User } from "@/utils/types";
 import Cookies from "js-cookie";
 import { useRouter } from "next/router";
+import client from "@/lib/apollo";
 interface UserContextProps {
   user: User | null;
   loginUserMethod: (user: User) => void;
@@ -43,6 +44,9 @@ export const UserContextProvider: React.FC<{ children: ReactNode }> = ({
     Cookies.remove("token");
     router.push("/");
     localStorage.removeItem("apollo-cache-persist");
+    client.clearStore().then(() => {
+      console.log("All caches cleared!");
+    });
   };
   return (
     <UserContext.Provider

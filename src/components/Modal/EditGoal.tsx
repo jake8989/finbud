@@ -13,8 +13,14 @@ interface EditGoalProps {
   isOpen: boolean;
   handleClose: () => void;
   goalId: string;
+  goalDescription: string;
 }
-const EditGoal: React.FC<EditGoalProps> = ({ isOpen, handleClose, goalId }) => {
+const EditGoal: React.FC<EditGoalProps> = ({
+  isOpen,
+  handleClose,
+  goalId,
+  goalDescription,
+}) => {
   const { user, userLoading } = useUser();
   if (userLoading) {
     return <p>Context Loading...</p>;
@@ -99,7 +105,7 @@ const EditGoal: React.FC<EditGoalProps> = ({ isOpen, handleClose, goalId }) => {
         },
       },
     });
-    if (data.editGoal.success)
+    if (data?.editGoal?.success)
       toast("Goal Updated Successfully!", "success", 4000);
     handleClose();
   };
@@ -112,7 +118,8 @@ const EditGoal: React.FC<EditGoalProps> = ({ isOpen, handleClose, goalId }) => {
       >
         <div className="modal-box">
           <h3 className="font-bold text-lg text-center">Edit Goal</h3>
-          <p className="">Input whatever changes you want to change in goal!</p>
+          <p className="text-[16px] text-rose-500">*{goalDescription}</p>
+          {/* <p className="">Input whatever changes you want to change in goal!</p> */}
 
           <div className="mt-2">
             <label className="input input-bordered flex items-center gap-2 mt-1.5">

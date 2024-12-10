@@ -71,6 +71,12 @@ const Navbar = () => {
             </li>
           </ul>
         </div> */}
+        <label
+          htmlFor="my-drawer-2"
+          className="btn btn-ghost drawer-button lg:hidden"
+        >
+          <Image src="/hamburger.svg" height={20} width={20} alt="no"></Image>
+        </label>
         <label className="swap swap-rotate">
           {/* this hidden checkbox controls the state */}
           <input

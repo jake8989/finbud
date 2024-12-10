@@ -145,8 +145,10 @@ const ExpenseCategories = () => {
             <h2 className="card-title">your Expense/Income Categories!</h2>
             {expenseCategories.map((category) => (
               <p key={category.key}>
+                <span className="text-primary">{category.key + 1}.</span>
+                {`     `}
                 {category.category}
-                <button
+                {/* <button
                   className="btn btn-ghost bg-error ml-[120px]"
                   onClick={() => handleDeleteExpenseCategory(category.category)}
                   disabled={DeleteExpenseCategoryLoading}
@@ -158,7 +160,7 @@ const ExpenseCategories = () => {
                     width="23"
                     alt="Delete Icon"
                   ></Image>{" "}
-                </button>
+                </button> */}
               </p>
             ))}
           </div>

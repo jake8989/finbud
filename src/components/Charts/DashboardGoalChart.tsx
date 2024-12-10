@@ -45,7 +45,7 @@ const DashboardGoalChart = () => {
   }
   return (
     <>
-      <div className="flex m-[50px] flex-wrap">
+      <div className="flex flex-wrap justify-center items-center">
         {data?.getAllUserGoals?.allUserGoals.map((goal) => (
           <div
             className="card bg-neutral text-neutral-content w-60 h-[230px] relative m-[5px]"
@@ -135,6 +135,7 @@ const DashboardGoalChart = () => {
               isOpen={isOpen}
               handleClose={handleClose}
               goalId={goalId}
+              goalDescription={goal.goalDescription}
             ></EditGoal>
           </div>
         ))}

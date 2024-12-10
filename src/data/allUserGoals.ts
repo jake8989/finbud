@@ -13,6 +13,7 @@ export const FetchallUserGoals = (username: string) => {
     variables: { username: username },
     fetchPolicy: "cache-first",
     skip: !username,
+    pollInterval: 300000,
   });
   //   const success = data.getAllUserGoals.success;
   return { data, loading, error, refetchGoals };

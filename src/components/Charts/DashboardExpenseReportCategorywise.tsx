@@ -15,9 +15,12 @@ import {
 import { Loading } from "../Loading/Loading";
 
 Chart.register(CategoryScale, LinearScale, Title, Tooltip, Legend, BarElement);
+Chart.defaults.color = "grey";
+import { useTheme } from "@/context/themeContext";
 
 const DashboardExpenseReportCategorywise = () => {
   const chartRef = useRef<Chart | null>(null);
+  const { theme } = useTheme();
 
   const { user, userLoading } = useUser();
   const year = new Date().getFullYear().toString();
@@ -88,6 +91,7 @@ const DashboardExpenseReportCategorywise = () => {
           plugins: {
             title: {
               display: true,
+
               text: "Monthly Expense Report Category Wise",
             },
           },

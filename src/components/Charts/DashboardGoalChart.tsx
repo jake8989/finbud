@@ -15,11 +15,16 @@ const DashboardGoalChart = () => {
     setIsOpen(false);
   };
 
-  const { user, userLoading } = useUser();
+  const { user, userLoading, logoutUserMethod } = useUser();
   if (userLoading) {
     return <LoadingBar></LoadingBar>;
   }
   const { data, loading, error } = FetchallUserGoals(user?.user?.username);
+
+  if (data?.getAllUserGoals?.success == false) {
+    alert("Something went wrong");
+    logoutUserMethod();
+  }
   const handleOpenAndGoalSelect = (goalId: string) => {
     setIsOpen(true);
     setGoalId(goalId);

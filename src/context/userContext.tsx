@@ -42,11 +42,11 @@ export const UserContextProvider: React.FC<{ children: ReactNode }> = ({
     setUser(null);
     localStorage.removeItem("user");
     Cookies.remove("token");
-    router.push("/");
     localStorage.removeItem("apollo-cache-persist");
     client.clearStore().then(() => {
       console.log("All caches cleared!");
     });
+    router.push("/");
   };
   return (
     <UserContext.Provider

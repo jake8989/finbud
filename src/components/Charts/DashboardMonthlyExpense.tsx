@@ -20,6 +20,7 @@ Chart.register(
   BarElement,
   BarController
 );
+Chart.defaults.color = "grey";
 import { Loading } from "../Loading/Loading";
 import { useUser } from "@/context/userContext";
 

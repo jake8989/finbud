@@ -117,7 +117,7 @@ const AddIncome = () => {
       <div className="card bg-base-100 w-96 shadow-xl">
         <div className="card-body">
           <h2 className="card-title">Add Income!</h2>
-          <p>Enter the amount and select the category</p>
+          {/* <p>Enter the amount and select the category</p> */}
           <p className="text-[12px]">
             *Be carefull adding incomes are irreversable
           </p>

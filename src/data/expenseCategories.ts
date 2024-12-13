@@ -131,7 +131,7 @@ export const FetchExpenseCategories = (username: string) => {
       variables: { username },
       fetchPolicy: "cache-first",
       skip: !username,
-      pollInterval: 300000,
+      // pollInterval: 300000,
     }
   );
 

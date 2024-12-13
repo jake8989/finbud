@@ -23,7 +23,7 @@ export const useFetchMonthlyData = (year: string, username: string) => {
       },
     },
     fetchPolicy: "cache-first",
-    pollInterval: 300000,
+    // pollInterval: 300000,
     skip: shouldSkipQuery || !username,
   });
 

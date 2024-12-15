@@ -117,11 +117,11 @@ const AddIncome = () => {
       <div className="card bg-base-100 w-96 shadow-xl">
         <div className="card-body">
           <h2 className="card-title">Add Income!</h2>
-          {/* <p>Enter the amount and select the category</p> */}
+          <p>Enter the amount and select the category</p>
           <p className="text-[12px]">
             *Be carefull adding incomes are irreversable
           </p>
-          <p className="text-[12px]">*Please add integer part of the income</p>
+          {/* <p className="text-[12px]">*Please add integer part of the income</p> */}
           <label className="input input-bordered flex items-center gap-2 mt-1.5">
             <Image src={"/rupees.svg"} height={18} width={18} alt="no"></Image>
             <input

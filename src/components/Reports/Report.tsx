@@ -2,8 +2,9 @@ import Image from "next/image";
 import React from "react";
 import { useUser } from "@/context/userContext";
 import { useToast } from "@/context/customToastContext";
-import { GENERATE_REPORT } from "@/lib/queries/generateReport";
-import { useQuery } from "@apollo/client";
+import { GENERATE_REPORT } from "@/lib/mutations/generateReport";
+import { useMutation } from "@apollo/client";
+import axios from "axios";
 interface ReportGenerationForm {
   username: string;
   month: string;
@@ -12,30 +13,88 @@ interface ReportGenerationForm {
 export const MontlyReports = () => {
   const { user } = useUser();
   const { toast } = useToast();
+  const [reportId, setReportId] = React.useState<string>("");
   const [reportForm, setReportForm] = React.useState<ReportGenerationForm>({
     username: user?.user?.username,
     month: "",
     year: "",
   });
+  const [generateReport, { data: ReportData, loading, error }] =
+    useMutation(GENERATE_REPORT);
   const handleOnChange = (event: any) => {
     event.preventDefault();
     setReportForm({ ...reportForm, [event.target.name]: event.target.value });
-    console.log(reportForm);
+    // console.log(reportForm);
   };
-  const handleSubmit = () => {
+  const handleSubmit = async (event: any) => {
+    event.preventDefault();
     if (reportForm.month === "") {
-      toast("Please Provide Month!", "error", 2000);
+      toast("Please Provide Month!", "error", 3000);
       return;
     }
     if (reportForm.year === "") {
-      toast("Please Provide Year!", "error", 2000);
+      toast("Please Provide Year!", "error", 3000);
       return;
     }
-    if (reportForm.username === "") {
-      toast("Please Login/Signup to continue!", "error", 2000);
-      return;
+    const { data } = await generateReport({
+      variables: {
+        report: {
+          username: user?.user?.username,
+          month: reportForm.month,
+          year: reportForm.year,
+        },
+      },
+    });
+    if (data?.generateReport?.success) {
+      setReportId(data.generateReport.reportId);
+      toast(
+        `Report generated with id ${data?.generateReport?.reportId}`,
+        "success",
+        3000
+      );
     }
+    if (error || !data?.generateReport?.success) {
+      toast(data?.generateReport?.message, "error", 3000);
+    }
+
     // console.log(reportForm);
+  };
+  const handleDownloadReport = async (event: any) => {
+    event.preventDefault();
+    if (reportId === "") {
+      alert("Please Select the data and generate the report!");
+      return;
+    }
+    console.log(reportId);
+    try {
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_BACKEND_REPORT_DOWNLOAD}/downloadReport`,
+        {
+          params: {
+            report_id: reportId,
+          },
+          responseType: "blob",
+        }
+      );
+
+      const fileBlob = new Blob([response.data], { type: "application/pdf" });
+      const link = document.createElement("a");
+      const filename = `${reportId}-generatedreport.pdf`;
+      link.href = URL.createObjectURL(fileBlob);
+      link.download = filename;
+
+      link.click();
+      URL.revokeObjectURL(link.href);
+      setReportId("");
+      // setReportForm({ username: "", month: "", year: "" });
+      // if (ReportData?.generateReport?.message) {
+      //   ReportData.generateReport.message = "$";
+      // }
+    } catch (error) {
+      alert("Error in downloading");
+      console.log(error);
+      return;
+    }
   };
 
   let years = [];
@@ -112,9 +171,23 @@ export const MontlyReports = () => {
             ))}
           </select>
 
-          <button className="btn btn-primary mt-1.5" onClick={handleSubmit}>
-            Generate Report
+          <button
+            className="btn btn-primary mt-1.5"
+            onClick={handleSubmit}
+            disabled={loading || reportId != ""}
+          >
+            {!loading ? "Generate Report" : "Generating..."}
           </button>
+          {ReportData?.generateReport?.message ===
+            "Report Generated Successfully!" && (
+            <button
+              className="btn btn-primary mt-1.5"
+              onClick={handleDownloadReport}
+            >
+              Download Report
+            </button>
+          )}
+          <button></button>
         </div>
         {/* <div className="flex gap-6"></div> */}
 
